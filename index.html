@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia de Jiu-Jitsu - Arte Suave</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#home">
+                <i class="bi bi-shield-fill-check me-2"></i>
+                ARTE SUAVE JIU-JITSU
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicos">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#horarios">Horários</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contato">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3 ms-2" href="#contato">Agendar Aula</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="row min-vh-100 align-items-center">
+                <div class="col-lg-8 mx-auto text-center text-white">
+                    <h1 class="display-3 fw-bold mb-4 animate-fade-up">
+                        TRANSFORME SUA VIDA COM O
+                        <span class="text-primary">JIU-JITSU</span>
+                    </h1>
+                    <p class="lead mb-5 animate-fade-up-delay">
+                        Descubra a arte suave que desenvolve disciplina, confiança e força física e mental. 
+                        Venha fazer parte da nossa família de lutadores!
+                    </p>
+                    <div class="animate-fade-up-delay-2">
+                        <a href="#contato" class="btn btn-primary btn-lg me-3 px-4 py-3">
+                            <i class="bi bi-calendar-check me-2"></i>
+                            Agendar Aula Experimental
+                        </a>
+                        <a href="#sobre" class="btn btn-outline-light btn-lg px-4 py-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Saiba Mais
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Section -->
+    <section id="sobre" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">Sobre Nossa Academia</h2>
+                    <p class="lead text-muted">
+                        Com mais de 10 anos de experiência, nossa academia é referência no ensino de Jiu-Jitsu, 
+                        oferecendo um ambiente acolhedor e profissional para todos os níveis.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle bg-primary text-white mb-3 mx-auto">
+                                <i class="bi bi-person-badge fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Instrutores Qualificados</h5>
+                            <p class="card-text text-muted">
+                                Professores faixas-pretas com vasta experiência em competições e ensino.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle bg-success text-white mb-3 mx-auto">
+                                <i class="bi bi-building fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Estrutura Completa</h5>
+                            <p class="card-text text-muted">
+                                Tatames profissionais, vestiários modernos e ambiente climatizado.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle bg-warning text-white mb-3 mx-auto">
+                                <i class="bi bi-clock fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Horários Flexíveis</h5>
+                            <p class="card-text text-muted">
+                                Aulas de manhã, tarde e noite para se adequar à sua rotina.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle bg-info text-white mb-3 mx-auto">
+                                <i class="bi bi-people fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Comunidade Unida</h5>
+                            <p class="card-text text-muted">
+                                Ambiente familiar e acolhedor para todas as idades e níveis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços Section -->
+    <section id="servicos" class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">Nossos Serviços</h2>
+                    <p class="lead text-muted">
+                        Oferecemos uma variedade de modalidades e serviços para atender todas as necessidades.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-trophy"></i>
+                        </div>
+                        <h4>Jiu-Jitsu Adulto</h4>
+                        <p>Aulas para iniciantes e avançados, focando em técnica, condicionamento físico e filosofia da arte suave.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Técnicas fundamentais</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Preparação para competições</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Defesa pessoal</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-heart"></i>
+                        </div>
+                        <h4>Jiu-Jitsu Kids</h4>
+                        <p>Programa especial para crianças e adolescentes, desenvolvendo disciplina, respeito e autoconfiança.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Desenvolvimento motor</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Disciplina e respeito</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Socialização</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-lightning"></i>
+                        </div>
+                        <h4>Muay Thai</h4>
+                        <p>Arte marcial tailandesa que desenvolve força, resistência e técnicas de striking.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Condicionamento físico</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Técnicas de striking</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Defesa pessoal</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-person-arms-up"></i>
+                        </div>
+                        <h4>Funcional Fight</h4>
+                        <p>Treinamento funcional específico para lutadores, melhorando força, agilidade e resistência.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Força funcional</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Condicionamento específico</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Prevenção de lesões</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h4>Defesa Pessoal</h4>
+                        <p>Técnicas práticas e eficazes para situações reais de defesa pessoal.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Situações reais</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Técnicas eficazes</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Autoconfiança</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h4>Aulas Particulares</h4>
+                        <p>Atendimento personalizado para acelerar seu desenvolvimento técnico.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Atenção individualizada</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Evolução acelerada</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Horários flexíveis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horários Section -->
+    <section id="horarios" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">Horários das Aulas</h2>
+                    <p class="lead text-muted">
+                        Confira nossos horários e encontre o que melhor se adapta à sua rotina.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                                        <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Horário</th>
+                                    <th>Segunda</th>
+                                    <th>Terça</th>
+                                    <th>Quarta</th>
+                                    <th>Quinta</th>
+                                    <th>Sexta</th>
+                                    <th>Sábado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">06:00 - 07:00</td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-warning">Funcional Fight</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-warning">Funcional Fight</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-info">Aula Aberta</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">07:00 - 08:00</td>
+                                    <td><span class="badge bg-success">Muay Thai</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-success">Muay Thai</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-success">Muay Thai</span></td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">16:00 - 17:00</td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                    <td><span class="badge bg-danger">Jiu-Jitsu Kids</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">19:00 - 20:00</td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-success">Muay Thai</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-success">Muay Thai</span></td>
+                                    <td><span class="badge bg-primary">Jiu-Jitsu Adulto</span></td>
+                                    <td><span class="badge bg-info">Sparring</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">20:00 - 21:00</td>
+                                    <td><span class="badge bg-warning">Funcional Fight</span></td>
+                                    <td><span class="badge bg-secondary">Defesa Pessoal</span></td>
+                                    <td><span class="badge bg-warning">Funcional Fight</span></td>
+                                    <td><span class="badge bg-secondary">Defesa Pessoal</span></td>
+                                    <td><span class="badge bg-warning">Funcional Fight</span></td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato Section -->
+    <section id="contato" class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">Entre em Contato</h2>
+                    <p class="lead text-muted">
+                        Pronto para começar sua jornada no Jiu-Jitsu? Entre em contato conosco!
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <h4 class="mb-4">Agende sua Aula Experimental</h4>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nome" class="form-label">Nome Completo</label>
+                                        <input type="text" class="form-control" id="nome" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="telefone" class="form-label">Telefone</label>
+                                        <input type="tel" class="form-control" id="telefone" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="idade" class="form-label">Idade</label>
+                                        <input type="number" class="form-control" id="idade" min="4" max="80">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="modalidade" class="form-label">Modalidade de Interesse</label>
+                                    <select class="form-select" id="modalidade">
+                                        <option value="">Selecione uma modalidade</option>
+                                        <option value="jiujitsu-adulto">Jiu-Jitsu Adulto</option>
+                                        <option value="jiujitsu-kids">Jiu-Jitsu Kids</option>
+                                        <option value="muay-thai">Muay Thai</option>
+                                        <option value="funcional">Funcional Fight</option>
+                                        <option value="defesa-pessoal">Defesa Pessoal</option>
+                                        <option value="particular">Aula Particular</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="experiencia" class="form-label">Experiência Anterior</label>
+                                    <select class="form-select" id="experiencia">
+                                        <option value="iniciante">Iniciante</option>
+                                        <option value="intermediario">Intermediário</option>
+                                        <option value="avancado">Avançado</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="mensagem" class="form-label">Mensagem (Opcional)</label>
+                                    <textarea class="form-control" id="mensagem" rows="4" placeholder="Conte-nos um pouco sobre seus objetivos..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-send me-2"></i>
+                                    Enviar Solicitação
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div>
+                                <h5>Endereço</h5>
+                                <p>Rua das Artes Marciais, 123<br>Centro - São Paulo/SP<br>CEP: 01234-567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <h5>Telefone</h5>
+                                <p>(11) 99999-9999<br>(11) 3333-3333</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div>
+                                <h5>E-mail</h5>
+                                <p>contato@artesuavejiujitsu.com.br</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <div>
+                                <h5>Horário de Funcionamento</h5>
+                                <p>Segunda a Sexta: 06h às 22h<br>Sábado: 08h às 16h<br>Domingo: Fechado</p>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links mt-4">
+                            <h5>Redes Sociais</h5>
+                            <div class="d-flex gap-3">
+                                <a href="#" class="social-link">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                                <a href="#" class="social-link">
+                                    <i class="bi bi-youtube"></i>
+                                </a>
+                                <a href="#" class="social-link">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-shield-fill-check me-2"></i>
+                        ARTE SUAVE JIU-JITSU
+                    </h5>
+                    <p class="text-muted">
+                        Transformando vidas através da arte suave do Jiu-Jitsu. 
+                        Venha fazer parte da nossa família de guerreiros!
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link me-3">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link me-3">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link me-3">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Links Rápidos</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#home" class="text-muted text-decoration-none">Início</a></li>
+                        <li><a href="#sobre" class="text-muted text-decoration-none">Sobre</a></li>
+                        <li><a href="#servicos" class="text-muted text-decoration-none">Serviços</a></li>
+                        <li><a href="#horarios" class="text-muted text-decoration-none">Horários</a></li>
+                        <li><a href="#contato" class="text-muted text-decoration-none">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Modalidades</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted text-decoration-none">Jiu-Jitsu Adulto</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Jiu-Jitsu Kids</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Muay Thai</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Funcional Fight</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Defesa Pessoal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 mb-4">
+                    <h6 class="fw-bold mb-3">Contato</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="bi bi-geo-alt me-2"></i>Rua das Artes Marciais, 123</li>
+                        <li><i class="bi bi-telephone me-2"></i>(11) 99999-9999</li>
+                        <li><i class="bi bi-envelope me-2"></i>contato@artesuavejiujitsu.com.br</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 Arte Suave Jiu-Jitsu. Todos os direitos reservados.
+                                            </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        Desenvolvido com <i class="bi bi-heart-fill text-danger"></i> para lutadores
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>
