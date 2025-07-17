@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (whatsappBtn) {
         // Animação de entrada após 3 segundos
         setTimeout(() => {
-            whatsappBtn.style.animation = 'pulse 2s infinite';
+            whatsappBtn.style.animation = 'pulse 1.8s infinite';
         }, 3000);
         
         // Para a animação ao passar o mouse
@@ -349,16 +349,24 @@ style.textContent = `
     }
     
     @keyframes pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-        }
-        70% {
-            box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-        }
+    0% {
+        box-shadow: 
+            0 0 0 0 rgba(37, 211, 102, 0.9),
+            0 0 0 0 rgba(37, 211, 102, 0.6);
     }
+    50% {
+        box-shadow: 
+            0 0 0 20px rgba(37, 211, 102, 0.3),
+            0 0 0 0 rgba(37, 211, 102, 0.6);
+    }
+    100% {
+        box-shadow: 
+            0 0 0 30px rgba(37, 211, 102, 0),
+            0 0 0 25px rgba(37, 211, 102, 0);
+    }
+}
+
+
     
     .is-invalid {
         border-color: #dc3545 !important;
