@@ -1,4 +1,60 @@
-// Smooth scrolling para links internos
+// Hero Slideshow
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentSlide = 0;
+    let slideInterval;
+
+    // Função para mostrar slide específico
+    function showSlide(index) {
+        // Remove active de todos os slides e indicadores
+        slides.forEach(slide => slide.classList.remove('active'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Adiciona active ao slide e indicador atual
+        slides[index].classList.add('active');
+        indicators[index].classList.add('active');
+        
+        currentSlide = index;
+    }
+
+    // Função para próximo slide
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Função para iniciar slideshow automático
+    function startSlideshow() {
+        slideInterval = setInterval(nextSlide, 5000); // Muda a cada 3 segundos
+    }
+
+    // Função para parar slideshow automático
+    function stopSlideshow() {
+        clearInterval(slideInterval);
+    }
+
+    // Event listeners para os indicadores
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            showSlide(index);
+            stopSlideshow();
+            startSlideshow(); // Reinicia o timer
+        });
+    });
+
+    // Pausa o slideshow quando o mouse está sobre a hero section
+    const heroSection = document.querySelector('.hero-section');
+    if (heroSection) {
+        heroSection.addEventListener('mouseenter', stopSlideshow);
+        heroSection.addEventListener('mouseleave', startSlideshow);
+    }
+
+    // Inicia o slideshow
+    startSlideshow();
+});
+
+// Smooth scrolling para links de navegação (código existente)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -12,17 +68,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar scroll effect
+// Navbar scroll effect (código existente)
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
-        navbar.style.backgroundColor = 'rgba(33, 37, 41, 0.95)';
-        navbar.style.backdropFilter = 'blur(10px)';
     } else {
         navbar.classList.remove('scrolled');
-        navbar.style.backgroundColor = '';
-        navbar.style.backdropFilter = '';
     }
 });
 
@@ -33,7 +85,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     // Coleta os dados do formulário
     const formData = {
         nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
+        email: document.getElementById('email').value,
         telefone: document.getElementById('telefone').value,
         idade: document.getElementById('idade').value,
         modalidade: document.getElementById('modalidade').value,
