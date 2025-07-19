@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Elementos do DOM
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -16,42 +16,57 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Toggle mostrar/ocultar senha
-    togglePassword.addEventListener('click', function() {
+    // Toggle mostrar/ocultar senha
+    togglePassword.addEventListener('click', function () {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        
+
         const icon = this.querySelector('i');
-        icon.classList.toggle('fa-eye');
-        icon.classList.toggle('fa-eye-slash');
+        const isVisible = type === 'text';
+
+        // Atualiza ícone
+        icon.classList.toggle('fa-eye', !isVisible);
+        icon.classList.toggle('fa-eye-slash', isVisible);
+
+        // Atualiza classe do botão
+        this.classList.toggle('password-visible', isVisible);
+
+        // Atualiza aria-label para acessibilidade
+        this.setAttribute('aria-label', isVisible ? 'Ocultar senha' : 'Mostrar senha');
+
+        // Mantém foco no input
+        passwordInput.focus();
+
+        // Move cursor para o final
+        setTimeout(() => {
+            passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
+        }, 0);
     });
 
+
     // Validação em tempo real
-    emailInput.addEventListener('input', function() {
+    emailInput.addEventListener('input', function () {
         validateEmail(this);
     });
 
-    passwordInput.addEventListener('input', function() {
-        validatePassword(this);
-    });
-
     // Submissão do formulário
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
-        
+
         // Remove mensagens de erro anteriores
         removeMessages();
-        
+
         // Validação
         if (!validateForm(email, password)) {
             return;
         }
-        
+
         // Inicia loading
         startLoading();
-        
+
         // Simula autenticação
         setTimeout(() => {
             authenticateUser(email, password);
@@ -62,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function validateEmail(input) {
         const email = input.value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
+
         if (email && !emailRegex.test(email)) {
             showFieldError(input, 'Email inválido');
             return false;
@@ -75,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Função de validação de senha
     function validatePassword(input) {
         const password = input.value.trim();
-        
+
         if (password && password.length < 6) {
             showFieldError(input, 'Senha deve ter pelo menos 6 caracteres');
             return false;
@@ -88,30 +103,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validação completa do formulário
     function validateForm(email, password) {
         let isValid = true;
-        
+
         if (!email) {
             showFieldError(emailInput, 'Email é obrigatório');
             isValid = false;
         } else if (!validateEmail(emailInput)) {
             isValid = false;
         }
-        
+
         if (!password) {
             showFieldError(passwordInput, 'Senha é obrigatória');
             isValid = false;
         } else if (!validatePassword(passwordInput)) {
             isValid = false;
         }
-        
+
         return isValid;
     }
 
     // Mostrar erro no campo
     function showFieldError(input, message) {
         removeFieldError(input);
-        
+
         input.style.borderColor = '#dc3545';
-        
+
         const errorDiv = document.createElement('div');
         errorDiv.className = 'field-error';
         errorDiv.textContent = message;
@@ -121,14 +136,14 @@ document.addEventListener('DOMContentLoaded', function() {
             margin-top: 5px;
             animation: fadeIn 0.3s ease;
         `;
-        
+
         input.parentNode.parentNode.appendChild(errorDiv);
     }
 
     // Remover erro do campo
     function removeFieldError(input) {
         input.style.borderColor = '#e1e5e9';
-        
+
         const existingError = input.parentNode.parentNode.querySelector('.field-error');
         if (existingError) {
             existingError.remove();
@@ -138,11 +153,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostrar mensagem geral
     function showMessage(message, type = 'error') {
         removeMessages();
-        
+
         const messageDiv = document.createElement('div');
         messageDiv.className = `${type}-message`;
         messageDiv.textContent = message;
-        
+
         loginForm.insertBefore(messageDiv, loginForm.firstChild);
     }
 
@@ -150,11 +165,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function removeMessages() {
         const messages = loginForm.querySelectorAll('.error-message, .success-message');
         messages.forEach(msg => msg.remove());
-        
+
         // Remove erros dos campos também
         const fieldErrors = loginForm.querySelectorAll('.field-error');
         fieldErrors.forEach(error => error.remove());
-        
+
         // Reset border colors
         [emailInput, passwordInput].forEach(input => {
             input.style.borderColor = '#e1e5e9';
@@ -183,28 +198,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password) {
             // Login bem-sucedido
             showMessage('Login realizado com sucesso!', 'success');
-            
+
             // Salva dados se "lembrar-me" estiver marcado
             if (rememberCheckbox.checked) {
                 localStorage.setItem('rememberedEmail', email);
             } else {
                 localStorage.removeItem('rememberedEmail');
             }
-            
+
             // Salva token de sessão (simulado)
             sessionStorage.setItem('authToken', 'demo-token-' + Date.now());
             sessionStorage.setItem('userEmail', email);
-            
+
             // Redireciona após 1 segundo
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1000);
-            
+
         } else {
             // Login falhou
             stopLoading();
             showMessage('Email ou senha incorretos. Tente: admin@academiapc.com / admin123');
-            
+
             // Foca no campo de email
             emailInput.focus();
         }
@@ -230,24 +245,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Adiciona animação de foco nos inputs
     [emailInput, passwordInput].forEach(input => {
-        input.addEventListener('focus', function() {
+        input.addEventListener('focus', function () {
             this.parentNode.style.transform = 'scale(1.02)';
             this.parentNode.style.transition = 'transform 0.2s ease';
         });
-        
-        input.addEventListener('blur', function() {
+
+        input.addEventListener('blur', function () {
             this.parentNode.style.transform = 'scale(1)';
         });
     });
 
     // Adiciona efeito de ripple no botão
-    loginBtn.addEventListener('click', function(e) {
+    loginBtn.addEventListener('click', function (e) {
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = e.clientX - rect.left - size / 2;
         const y = e.clientY - rect.top - size / 2;
-        
+
         ripple.style.cssText = `
             position: absolute;
             width: ${size}px;
@@ -260,9 +275,9 @@ document.addEventListener('DOMContentLoaded', function() {
             animation: ripple 0.6s linear;
             pointer-events: none;
         `;
-        
+
         this.appendChild(ripple);
-        
+
         setTimeout(() => {
             ripple.remove();
         }, 600);
@@ -297,12 +312,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
 
     // Atalhos de teclado
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         // Enter para submeter formulário
         if (e.key === 'Enter' && (emailInput === document.activeElement || passwordInput === document.activeElement)) {
             loginForm.dispatchEvent(new Event('submit'));
         }
-        
+
         // Escape para limpar formulário
         if (e.key === 'Escape') {
             clearForm();
@@ -320,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Detecção de caps lock
     [emailInput, passwordInput].forEach(input => {
-        input.addEventListener('keydown', function(e) {
+        input.addEventListener('keydown', function (e) {
             if (e.getModifierState && e.getModifierState('CapsLock')) {
                 showCapsLockWarning(this);
             } else {
@@ -331,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showCapsLockWarning(input) {
         if (input.parentNode.parentNode.querySelector('.caps-warning')) return;
-        
+
         const warning = document.createElement('div');
         warning.className = 'caps-warning';
         warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Caps Lock está ativado';
@@ -347,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
             align-items: center;
             gap: 5px;
         `;
-        
+
         input.parentNode.parentNode.appendChild(warning);
     }
 
@@ -365,13 +380,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkLoginAttempts() {
         const now = Date.now();
         const timeDiff = now - lastAttemptTime;
-        
+
         // Reset tentativas após 15 minutos
         if (timeDiff > 15 * 60 * 1000) {
             loginAttempts = 0;
             localStorage.setItem('loginAttempts', '0');
         }
-        
+
         // Bloqueia após 5 tentativas
         if (loginAttempts >= 5) {
             const remainingTime = Math.ceil((15 * 60 * 1000 - timeDiff) / 1000 / 60);
@@ -379,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loginBtn.disabled = true;
             return false;
         }
-        
+
         return true;
     }
 
@@ -397,12 +412,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Modifica a função de autenticação para incluir controle de tentativas
     const originalAuthenticateUser = authenticateUser;
-    authenticateUser = function(email, password) {
+    authenticateUser = function (email, password) {
         if (!checkLoginAttempts()) {
             stopLoading();
             return;
         }
-        
+
         // Verifica credenciais
         if (email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password) {
             resetLoginAttempts();
@@ -410,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             recordFailedAttempt();
             stopLoading();
-            
+
             const remainingAttempts = 5 - loginAttempts;
             if (remainingAttempts > 0) {
                 showMessage(`Email ou senha incorretos. ${remainingAttempts} tentativas restantes. Tente: admin@academiapc.com / admin123`);
@@ -418,124 +433,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 showMessage('Muitas tentativas de login. Conta temporariamente bloqueada.');
                 loginBtn.disabled = true;
             }
-            
+
             emailInput.focus();
         }
     };
-
-    // Adiciona indicador de força da senha
-    passwordInput.addEventListener('input', function() {
-        showPasswordStrength(this.value);
-    });
-
-    function showPasswordStrength(password) {
-        let existingIndicator = document.querySelector('.password-strength');
-        if (existingIndicator) {
-            existingIndicator.remove();
-        }
-        
-        if (password.length === 0) return;
-        
-        const strength = calculatePasswordStrength(password);
-        const indicator = document.createElement('div');
-        indicator.className = 'password-strength';
-        
-        const strengthColors = {
-            'Muito Fraca': '#dc3545',
-            'Fraca': '#fd7e14',
-            'Média': '#ffc107',
-            'Forte': '#28a745',
-            'Muito Forte': '#20c997'
-        };
-        
-        indicator.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                <div style="flex: 1; height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden;">
-                    <div style="height: 100%; background: ${strengthColors[strength.text]}; width: ${strength.score * 20}%; transition: all 0.3s ease;"></div>
-                </div>
-                <span style="font-size: 0.8rem; color: ${strengthColors[strength.text]}; font-weight: 500;">${strength.text}</span>
-            </div>
-        `;
-        
-        passwordInput.parentNode.parentNode.appendChild(indicator);
-    }
-
-    function calculatePasswordStrength(password) {
-        let score = 0;
-        
-        // Comprimento
-        if (password.length >= 8) score++;
-        if (password.length >= 12) score++;
-        
-        // Caracteres
-        if (/[a-z]/.test(password)) score++;
-        if (/[A-Z]/.test(password)) score++;
-        if (/[0-9]/.test(password)) score++;
-        if (/[^A-Za-z0-9]/.test(password)) score++;
-        
-        const strengthTexts = ['Muito Fraca', 'Fraca', 'Média', 'Forte', 'Muito Forte'];
-        const index = Math.min(Math.floor(score / 1.2), 4);
-        
-        return {
-            score: score,
-            text: strengthTexts[index]
-        };
-    }
-
-    // Adiciona suporte a biometria (se disponível)
-    if ('credentials' in navigator && 'create' in navigator.credentials) {
-        addBiometricOption();
-    }
-
-    function addBiometricOption() {
-        const biometricBtn = document.createElement('button');
-        biometricBtn.type = 'button';
-        biometricBtn.className = 'biometric-btn';
-        biometricBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Entrar com Biometria';
-        biometricBtn.style.cssText = `
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #667eea;
-            background: transparent;
-            color: #667eea;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        `;
-        
-        biometricBtn.addEventListener('click', handleBiometricLogin);
-        biometricBtn.addEventListener('mouseenter', function() {
-            this.style.background = '#667eea';
-            this.style.color = 'white';
-        });
-        biometricBtn.addEventListener('mouseleave', function() {
-            this.style.background = 'transparent';
-            this.style.color = '#667eea';
-        });
-        
-        loginForm.appendChild(biometricBtn);
-    }
-
-    async function handleBiometricLogin() {
-        try {
-            // Simula autenticação biométrica
-            showMessage('Autenticação biométrica não implementada nesta demonstração', 'error');
-        } catch (error) {
-            showMessage('Erro na autenticação biométrica', 'error');
-        }
-    }
 
     // Inicialização
     checkExistingSession();
     loadRememberedEmail();
     checkLoginAttempts();
-    
+
     // Foca no primeiro campo vazio
     if (!emailInput.value) {
         emailInput.focus();
@@ -557,21 +464,21 @@ document.addEventListener('DOMContentLoaded', function() {
             </p>
         </div>
     `;
-    
+
     loginForm.appendChild(demoInfo);
 
     console.log('Sistema de login carregado com sucesso!');
 });
 
 // Função para logout (para ser usada em outras páginas)
-window.logout = function() {
+window.logout = function () {
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('userEmail');
     window.location.href = 'login.html';
 };
 
 // Função para verificar autenticação (para ser usada em outras páginas)
-window.checkAuth = function() {
+window.checkAuth = function () {
     const authToken = sessionStorage.getItem('authToken');
     if (!authToken) {
         window.location.href = 'login.html';

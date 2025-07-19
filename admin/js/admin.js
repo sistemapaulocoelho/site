@@ -359,8 +359,9 @@ document.addEventListener('DOMContentLoaded', function() {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1'};
-            color: ${type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460'};
+            background: ${type === 'success' ? '#dcfce7' : type === 'error' ? '#fef2f2' : '#f8f9fa'};
+            color: ${type === 'success' ? '#166534' : type === 'error' ? '#991b1b' : '#1a1a1a'};
+            border: 1px solid ${type === 'success' ? '#bbf7d0' : type === 'error' ? '#fecaca' : '#e5e7eb'};
             padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
