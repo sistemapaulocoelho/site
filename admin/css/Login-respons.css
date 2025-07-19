@@ -252,15 +252,6 @@
   .input-group input {
     background: rgba(45, 45, 45, 0.8);
     border-color: rgba(220, 38, 38, 0.3);
-    color: #fff;
-  }
-
-  .input-group input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .input-group i {
-    color: #d1d5db;
   }
 
   .checkbox-container {
@@ -323,7 +314,6 @@
   .input-group input {
     border: 2px solid #1a1a1a;
     background: #fff;
-    color: #1a1a1a;
   }
 
   .input-group input:focus {
