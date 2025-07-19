@@ -34,18 +34,18 @@
     color: var(--primary-black);
   }
 
-      .form-options {
-        display: flex !important;
-        flex-direction: row !important;
-        /* gap: 8px; */
-        align-items: flex-start;
-        margin-top: 0px; /* Ainda mais próximo em mobile */
-    }
+  .form-options {
+    display: flex !important;
+    flex-direction: row !important;
+    /* gap: 8px; */
+    align-items: flex-start;
+    margin-top: 0px; /* Ainda mais próximo em mobile */
+  }
 
-    .forgot-password {
-        font-size: 0.9rem; /* Ainda menor em mobile */
+  .forgot-password {
+    font-size: 0.9rem; /* Ainda menor em mobile */
     color: #ff0000;
-    }
+  }
 
   .header {
     position: sticky;
@@ -120,7 +120,8 @@
   }
 
   .input-group input {
-    /* padding: 12px 12px 12px 40px; */
+    background: white !important;
+    color: #000000 !important;
   }
 
   .login-btn {
@@ -250,8 +251,9 @@
   }
 
   .input-group input {
-    background: rgba(45, 45, 45, 0.8);
     border-color: rgba(220, 38, 38, 0.3);
+    background: white !important;
+    color: #000000 !important;
   }
 
   .checkbox-container {
@@ -313,7 +315,8 @@
 
   .input-group input {
     border: 2px solid #1a1a1a;
-    background: #fff;
+    background: white !important;
+    color: #000000 !important;
   }
 
   .input-group input:focus {
