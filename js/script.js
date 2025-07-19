@@ -78,51 +78,216 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Form submission
-document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault();
+// Form submission - MELHORADO
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Coleta os dados do formulário
+        const formData = {
+            nome: document.getElementById('nome')?.value || '',
+            email: document.getElementById('email')?.value || '',
+            telefone: document.getElementById('telefone')?.value || '',
+            idade: document.getElementById('idade')?.value || '',
+            modalidade: document.getElementById('modalidade')?.value || '',
+            experiencia: document.getElementById('experiencia')?.value || '',
+            mensagem: document.getElementById('mensagem')?.value || ''
+        };
+        
+        // Validação melhorada
+        const errors = validateForm(formData);
+        if (errors.length > 0) {
+            showNotification(errors.join('\n'), 'error');
+            return;
+        }
+        
+        // Resto do código permanece igual...
+        const submitBtn = document.querySelector('button[type="submit"]');
+        if (!submitBtn) return;
+        
+        const originalText = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Enviando...';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            showNotification('Solicitação enviada com sucesso! Entraremos em contato em breve.', 'success');
+            form.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
+});
+
+// Função de validação melhorada - ADICIONAR
+function validateForm(data) {
+    const errors = [];
     
-    // Coleta os dados do formulário
-    const formData = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        telefone: document.getElementById('telefone').value,
-        idade: document.getElementById('idade').value,
-        modalidade: document.getElementById('modalidade').value,
-        experiencia: document.getElementById('experiencia').value,
-        mensagem: document.getElementById('mensagem').value
-    };
-    
-    // Validação básica
-    if (!formData.nome || !formData.email || !formData.telefone) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
+    if (!data.nome || data.nome.trim().length < 2) {
+        errors.push('Nome deve ter pelo menos 2 caracteres');
     }
     
-    // Simula envio do formulário
-    const submitBtn = document.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    if (!data.email || !isValidEmail(data.email)) {
+        errors.push('Email inválido');
+    }
     
-    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Enviando...';
-    submitBtn.disabled = true;
+    if (!data.telefone || data.telefone.replace(/\D/g, '').length < 10) {
+        errors.push('Telefone deve ter pelo menos 10 dígitos');
+    }
     
-    // Simula delay de envio
+    return errors;
+}
+
+// Função de validação de email - ADICIONAR
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Sistema de notificações melhorado
+function showNotification(message, type = 'info') {
+    // Remove notificação existente
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    
+    const colors = {
+        success: '#28a745',
+        error: '#dc3545',
+        warning: '#ffc107',
+        info: '#17a2b8'
+    };
+    
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${icons[type] || icons.info}"></i>
+            <span>${message}</span>
+            <button class="notification-close" aria-label="Fechar notificação">&times;</button>
+        </div>
+    `;
+
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${colors[type] || colors.info};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 3000;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+        font-family: inherit;
+        white-space: pre-line;
+    `;
+
+    document.body.appendChild(notification);
+
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.addEventListener('click', () => notification.remove());
+
     setTimeout(() => {
-        alert('Solicitação enviada com sucesso! Entraremos em contato em breve.');
-        
-        // Reset do formulário
-        document.querySelector('form').reset();
-        
-        // Restaura o botão
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-        
-        // Opcional: redirecionar para WhatsApp
-        const whatsappMessage = `Olá! Gostaria de agendar uma aula experimental.%0A%0ANome: ${formData.nome}%0AIdade: ${formData.idade}%0AModalidade: ${formData.modalidade}%0AExperiência: ${formData.experiencia}`;
-        // window.open(`https://wa.me/5511999999999?text=${whatsappMessage}`, '_blank');
-        
-    }, 2000);
+        if (notification.parentNode) {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
+}
+
+// Máscara para telefone - MELHORADA
+document.addEventListener('DOMContentLoaded', function() {
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                } else {
+                    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                }
+            }
+            
+            e.target.value = value;
+        });
+    }
 });
+
+// Validação de email em tempo real - MELHORADA
+document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function(e) {
+            const email = e.target.value;
+            
+            if (email && !isValidEmail(email)) {
+                e.target.classList.add('is-invalid');
+                e.target.classList.remove('is-valid');
+            } else if (email) {
+                e.target.classList.remove('is-invalid');
+                e.target.classList.add('is-valid');
+            } else {
+                e.target.classList.remove('is-invalid', 'is-valid');
+            }
+        });
+
+        // Remove erro ao digitar
+        emailInput.addEventListener('input', function(e) {
+            if (e.target.classList.contains('is-invalid') && isValidEmail(e.target.value)) {
+                e.target.classList.remove('is-invalid');
+                e.target.classList.add('is-valid');
+            }
+        });
+    }
+});
+
+// Tooltip para badges na tabela de horários - MELHORADO
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifica se Bootstrap está disponível
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+});
+
+// Lazy loading para imagens - MELHORADO
+if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                img.classList.add('loaded');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    });
+}
 
 // Animação de scroll para elementos
 const observerOptions = {

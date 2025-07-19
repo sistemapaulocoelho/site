@@ -1,0 +1,27 @@
+Site Principal:
+Hero section com slideshow automático
+Seções responsivas (serviços, planos, contato)
+Formulário de contato com validação
+Animações suaves ao scroll
+Menu mobile responsivo
+PWA com Service Worker
+Painel Administrativo:
+Sistema de login seguro com controle de tentativas
+Dashboard com estatísticas e gráficos
+Gerenciamento completo de alunos
+Controle de mensalidades
+Relatórios financeiros
+Interface totalmente responsiva
+Recursos Avançados:
+Validações em tempo real
+Notificações personalizadas
+Máscaras para inputs
+Lazy loading de imagens
+Cache inteligente
+Suporte a PWA
+Modo escuro automático
+Acessibilidade completa
+Para testar o sistema:
+
+Acesse o site principal normalmente
+Para o admin, use: admin@academiapc.com / admin123

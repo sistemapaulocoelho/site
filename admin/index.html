@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Academia Paulo Coelho</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-dumbbell"></i> Academia PC</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-chart-dashboard"></i> Dashboard
+                </a></li>
+                <li><a href="#alunos" class="nav-link" data-section="alunos">
+                    <i class="fas fa-users"></i> Alunos
+                </a></li>
+                <li><a href="#pagamentos" class="nav-link" data-section="pagamentos">
+                    <i class="fas fa-credit-card"></i> Pagamentos
+                </a></li>
+                <li><a href="#relatorios" class="nav-link" data-section="relatorios">
+                    <i class="fas fa-chart-bar"></i> Relatórios
+                </a></li>
+                <li><a href="#configuracoes" class="nav-link" data-section="configuracoes">
+                    <i class="fas fa-cog"></i> Configurações
+                </a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>Bem-vindo, Admin</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total de Alunos</h3>
+                        <p class="stat-number">247</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Alunos Ativos</h3>
+                        <p class="stat-number">198</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Receita Mensal</h3>
+                        <p class="stat-number">R$ 24.750</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pagamentos Pendentes</h3>
+                        <p class="stat-number">12</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Últimos Alunos Cadastrados</h3>
+                    <div class="recent-list">
+                        <div class="recent-item">
+                            <div class="item-info">
+                                <strong>Maria Silva</strong>
+                                <span>Cadastrado hoje</span>
+                            </div>
+                        </div>
+                        <div class="recent-item">
+                            <div class="item-info">
+                                <strong>João Santos</strong>
+                                <span>Cadastrado ontem</span>
+                            </div>
+                        </div>
+                        <div class="recent-item">
+                            <div class="item-info">
+                                <strong>Ana Costa</strong>
+                                <span>Cadastrado há 2 dias</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>Pagamentos Recentes</h3>
+                    <div class="recent-list">
+                        <div class="recent-item">
+                            <div class="item-info">
+                                <strong>Carlos Oliveira</strong>
+                                <span>R$ 120,00 - Pago</span>
+                            </div>
+                            <span class="status-badge paid">Pago</span>
+                        </div>
+                        <div class="recent-item">
+                            <div class="item-info">
+                                <strong>Fernanda Lima</strong>
+                                <span>R$ 120,00 - Pendente</span>
+                            </div>
+                            <span class="status-badge pending">Pendente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alunos Section -->
+        <section id="alunos" class="content-section">
+            <div class="section-header">
+                <h2>Gerenciamento de Alunos</h2>
+                <button class="btn btn-primary" id="add-aluno-btn">
+                    <i class="fas fa-plus"></i> Novo Aluno
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar aluno..." id="search-aluno">
+                </div>
+                <select id="filter-status">
+                    <option value="">Todos os Status</option>
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                    <option value="suspenso">Suspenso</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Plano</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#001</td>
+                            <td>Maria Silva</td>
+                            <td>maria@email.com</td>
+                            <td>(11) 99999-9999</td>
+                            <td>Mensal</td>
+                            <td><span class="status-badge active">Ativo</span></td>
+                            <td>
+                                <button class="btn-action edit" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action delete" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#002</td>
+                            <td>João Santos</td>
+                            <td>joao@email.com</td>
+                            <td>(11) 88888-8888</td>
+                            <td>Trimestral</td>
+                            <td><span class="status-badge active">Ativo</span></td>
+                            <td>
+                                <button class="btn-action edit" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action delete" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#003</td>
+                            <td>Ana Costa</td>
+                            <td>ana@email.com</td>
+                            <td>(11) 77777-7777</td>
+                            <td>Anual</td>
+                            <td><span class="status-badge inactive">Inativo</span></td>
+                            <td>
+                                <button class="btn-action edit" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action delete" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="btn-pagination" disabled>Anterior</button>
+                <span class="pagination-info">Página 1 de 5</span>
+                <button class="btn-pagination">Próximo</button>
+            </div>
+        </section>
+
+        <!-- Pagamentos Section -->
+        <section id="pagamentos" class="content-section">
+            <div class="section-header">
+                <h2>Gerenciamento de Pagamentos</h2>
+                <button class="btn btn-primary" id="add-pagamento-btn">
+                    <i class="fas fa-plus"></i> Novo Pagamento
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar pagamento..." id="search-pagamento">
+                </div>
+                <select id="filter-pagamento-status">
+                    <option value="">Todos os Status</option>
+                    <option value="pago">Pago</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="atrasado">Atrasado</option>
+                </select>
+                <input type="month" id="filter-mes" class="date-filter">
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Aluno</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Método</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#P001</td>
+                            <td>Maria Silva</td>
+                            <td>R$ 120,00</td>
+                            <td>15/12/2024</td>
+                            <td><span class="status-badge paid">Pago</span></td>
+                            <td>PIX</td>
+                            <td>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action print" title="Imprimir">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#P002</td>
+                            <td>João Santos</td>
+                            <td>R$ 320,00</td>
+                            <td>20/12/2024</td>
+                            <td><span class="status-badge pending">Pendente</span></td>
+                            <td>Boleto</td>
+                            <td>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" title="Marcar como Pago">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#P003</td>
+                            <td>Ana Costa</td>
+                            <td>R$ 120,00</td>
+                            <td>10/12/2024</td>
+                            <td><span class="status-badge overdue">Atrasado</span></td>
+                            <td>Cartão</td>
+                            <td>
+                                <button class="btn-action view" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Relatórios Section -->
+        <section id="relatorios" class="content-section">
+            <div class="section-header">
+                <h2>Relatórios</h2>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Relatório Financeiro</h3>
+                    <p>Visualize receitas, despesas e lucros</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório de Alunos</h3>
+                    <p>Lista completa de alunos e status</p>
+                    <button class="btn btn-outline">Gerar Relatório                    </button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório de Inadimplência</h3>
+                    <p>Alunos com pagamentos em atraso</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório Mensal</h3>
+                    <p>Resumo completo do mês</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configurações Section -->
+        <section id="configuracoes" class="content-section">
+            <div class="section-header">
+                <h2>Configurações</h2>
+            </div>
+
+            <div class="config-grid">
+                <div class="config-card">
+                    <h3>Configurações Gerais</h3>
+                    <form class="config-form">
+                        <div class="form-group">
+                            <label>Nome da Academia</label>
+                            <input type="text" value="Academia Paulo Coelho">
+                        </div>
+                        <div class="form-group">
+                            <label>Email de Contato</label>
+                            <input type="email" value="contato@academiapc.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone</label>
+                            <input type="tel" value="(11) 99999-9999">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+
+                <div class="config-card">
+                    <h3>Valores dos Planos</h3>
+                    <form class="config-form">
+                        <div class="form-group">
+                            <label>Plano Mensal</label>
+                            <input type="number" value="120" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Plano Trimestral</label>
+                            <input type="number" value="320" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Plano Anual</label>
+                            <input type="number" value="1200" step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para Novo Aluno -->
+    <div id="modal-aluno" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Aluno</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone *</label>
+                        <input type="tel" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de Nascimento</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-group">
+                        <label>Plano</label>
+                        <select>
+                            <option value="mensal">Mensal - R$ 120,00</option>
+                            <option value="trimestral">Trimestral - R$ 320,00</option>
+                            <option value="anual">Anual - R$ 1.200,00</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>CEP</label>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Aluno</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Novo Pagamento -->
+    <div id="modal-pagamento" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Pagamento</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Aluno *</label>
+                        <select required>
+                            <option value="">Selecione um aluno</option>
+                            <option value="1">Maria Silva</option>
+                            <option value="2">João Santos</option>
+                            <option value="3">Ana Costa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor *</label>
+                        <input type="number" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de Vencimento *</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Método de Pagamento</label>
+                        <select>
+                            <option value="pix">PIX</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="cartao">Cartão</option>
+                            <option value="dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
