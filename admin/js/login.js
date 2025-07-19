@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Redireciona após 1 segundo
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'admin.html';
             }, 1000);
 
         } else {
@@ -449,23 +449,6 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         passwordInput.focus();
     }
-
-    // Adiciona informações de demonstração
-    const demoInfo = document.createElement('div');
-    demoInfo.className = 'demo-info';
-    demoInfo.innerHTML = `
-        <div style="background: #e3f2fd; border: 1px solid #90caf9; border-radius: 8px; padding: 15px; margin-top: 20px;">
-            <h4 style="margin: 0 0 10px 0; color: #1565c0; font-size: 0.9rem;">
-                <i class="fas fa-info-circle"></i> Demonstração
-            </h4>
-            <p style="margin: 0; font-size: 0.8rem; color: #1976d2; line-height: 1.4;">
-                <strong>Email:</strong> admin@academiapc.com<br>
-                <strong>Senha:</strong> admin123
-            </p>
-        </div>
-    `;
-
-    loginForm.appendChild(demoInfo);
 
     console.log('Sistema de login carregado com sucesso!');
 });

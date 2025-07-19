@@ -14,34 +14,6 @@
 
 /* Melhorias adicionais para responsividade */
 
-/* Tablets */
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 220px;
-  }
-
-  .main-content {
-    margin-left: 220px;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .table-container {
-    font-size: 0.9rem;
-  }
-
-  .data-table th,
-  .data-table td {
-    padding: 12px 10px;
-  }
-}
-
 /* Mobile Large */
 @media (max-width: 768px) {
   .logo {
@@ -62,11 +34,18 @@
     color: var(--primary-black);
   }
 
-  .form-options {
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
-  }
+      .form-options {
+        display: flex !important;
+        flex-direction: row !important;
+        /* gap: 8px; */
+        align-items: flex-start;
+        margin-top: 0px; /* Ainda mais próximo em mobile */
+    }
+
+    .forgot-password {
+        font-size: 0.9rem; /* Ainda menor em mobile */
+    color: #ff0000;
+    }
 
   .header {
     position: sticky;
