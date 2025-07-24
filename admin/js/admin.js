@@ -495,6 +495,90 @@ function validateCPF(cpf) {
     return true;
 }
 
+// Função para formatar CEP
+function formatCEP(cep) {
+    cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+    if (cep.length <= 5) {
+        return cep;
+    }
+    return cep.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+}
+
+// Função para buscar endereço pelo CEP
+async function buscarEnderecoPorCEP(cep) {
+    const cepLimpo = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+    const statusElement = document.querySelector('.cep-status');
+    
+    // Verifica se o CEP tem 8 dígitos
+    if (cepLimpo.length !== 8) {
+        statusElement.textContent = '';
+        return;
+    }
+    
+    try {
+        statusElement.textContent = 'Buscando...';
+        statusElement.style.color = '#007bff';
+        
+        const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+        const data = await response.json();
+        
+        if (data.erro) {
+            statusElement.textContent = 'CEP não encontrado';
+            statusElement.style.color = '#dc3545';
+            return;
+        }
+        
+        // Preenche os campos automaticamente
+        document.getElementById('endereco-aluno').value = data.logradouro || '';
+        document.getElementById('bairro-aluno').value = data.bairro || '';
+        document.getElementById('cidade-aluno').value = data.localidade || '';
+        
+        statusElement.textContent = 'Endereço encontrado!';
+        statusElement.style.color = '#28a745';
+        
+        // Remove a mensagem após 3 segundos
+        setTimeout(() => {
+            statusElement.textContent = '';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+        statusElement.textContent = 'Erro ao buscar CEP';
+        statusElement.style.color = '#dc3545';
+    }
+}
+
+// Event listeners para o CEP
+document.addEventListener('DOMContentLoaded', function() {
+    const cepInput = document.getElementById('cep-aluno');
+    
+    if (cepInput) {
+        // Formatar CEP enquanto digita
+        cepInput.addEventListener('input', function(e) {
+            e.target.value = formatCEP(e.target.value);
+        });
+        
+        // Buscar endereço quando sair do campo (blur)
+        cepInput.addEventListener('blur', function(e) {
+            const cep = e.target.value;
+            if (cep.length >= 8) {
+                buscarEnderecoPorCEP(cep);
+            }
+        });
+        
+        // Buscar endereço ao pressionar Enter
+        cepInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const cep = e.target.value;
+                if (cep.length >= 8) {
+                    buscarEnderecoPorCEP(cep);
+                }
+            }
+        });
+    }
+});
+
 // Exporta funções para uso global
 window.AdminPanel = {
     showNotification,

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Academia Paulo Coelho</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/favico2.ico">
-    
+
     <link rel="stylesheet" href="css/admin.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -20,20 +22,20 @@
         <nav class="sidebar-nav">
             <ul>
                 <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
-                    <i class="fas fa-chart-dashboard"></i> Dashboard
-                </a></li>
+                        <i class="fas fa-chart-dashboard"></i> Dashboard
+                    </a></li>
                 <li><a href="#alunos" class="nav-link" data-section="alunos">
-                    <i class="fas fa-users"></i> Alunos
-                </a></li>
+                        <i class="fas fa-users"></i> Alunos
+                    </a></li>
                 <li><a href="#pagamentos" class="nav-link" data-section="pagamentos">
-                    <i class="fas fa-credit-card"></i> Pagamentos
-                </a></li>
+                        <i class="fas fa-credit-card"></i> Pagamentos
+                    </a></li>
                 <li><a href="#relatorios" class="nav-link" data-section="relatorios">
-                    <i class="fas fa-chart-bar"></i> Relatórios
-                </a></li>
+                        <i class="fas fa-chart-bar"></i> Relatórios
+                    </a></li>
                 <li><a href="#configuracoes" class="nav-link" data-section="configuracoes">
-                    <i class="fas fa-cog"></i> Configurações
-                </a></li>
+                        <i class="fas fa-cog"></i> Configurações
+                    </a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
@@ -360,7 +362,7 @@
                 <div class="report-card">
                     <h3>Relatório de Alunos</h3>
                     <p>Lista completa de alunos e status</p>
-                    <button class="btn btn-outline">Gerar Relatório                    </button>
+                    <button class="btn btn-outline">Gerar Relatório </button>
                 </div>
                 <div class="report-card">
                     <h3>Relatório de Inadimplência</h3>
@@ -465,20 +467,33 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-row">
+                <div class="form-group">
+                    <label>CEP</label>
+                    <input type="text" id="cep-aluno" placeholder="00000-000" maxlength="9">
+                    <small class="cep-status"></small>
+                </div>
                 <div class="form-group">
                     <label>Endereço</label>
-                    <input type="text">
+                    <input type="text" id="endereco-aluno">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Cidade</label>
-                        <input type="text">
-                    </div>
-                    <div class="form-group">
-                        <label>CEP</label>
-                        <input type="text">
-                    </div>
+                <div class="form-group">
+                    <label>Número</label>
+                    <input type="text" id="numero-aluno">
                 </div>
+                <div class="form-group">
+                    <label>Complemento</label>
+                    <input type="text" id="complemento-aluno">
+                </div>
+                <div class="form-group">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro-aluno">
+                </div>
+                <div class="form-group">
+                    <label>Cidade</label>
+                    <input type="text" id="cidade-aluno">
+                </div>
+            </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Salvar Aluno</button>
@@ -539,4 +554,5 @@
 
     <script src="js/admin.js"></script>
 </body>
+
 </html>
