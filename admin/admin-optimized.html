@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Academia Paulo Coelho</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/favico2.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" as="script">
+    <link rel="preload" href="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js" as="script">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Carregando...</p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="../assets/Logo.png" alt="Paulo Coelho" class="admin-logo">
+            <h2>Paulo Coelho</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-chart-dashboard"></i> Dashboard
+                    </a></li>
+                <li><a href="#alunos" class="nav-link" data-section="alunos">
+                        <i class="fas fa-users"></i> Alunos
+                    </a></li>
+                <li><a href="#pagamentos" class="nav-link" data-section="pagamentos">
+                        <i class="fas fa-credit-card"></i> Pagamentos
+                    </a></li>
+                <li><a href="#relatorios" class="nav-link" data-section="relatorios">
+                        <i class="fas fa-chart-bar"></i> Relatórios
+                    </a></li>
+                <li><a href="#configuracoes" class="nav-link" data-section="configuracoes">
+                        <i class="fas fa-cog"></i> Configurações
+                    </a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>Bem-vindo, Admin</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total de Alunos</h3>
+                        <p class="stat-number" id="total-alunos">-</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Alunos Ativos</h3>
+                        <p class="stat-number" id="alunos-ativos">-</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Receita Mensal</h3>
+                        <p class="stat-number" id="receita-mensal">-</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pagamentos Pendentes</h3>
+                        <p class="stat-number" id="pagamentos-pendentes">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Últimos Alunos Cadastrados</h3>
+                    <div class="recent-list" id="recent-alunos">
+                        <div class="loading-placeholder">Carregando...</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>Pagamentos Recentes</h3>
+                    <div class="recent-list" id="recent-pagamentos">
+                        <div class="loading-placeholder">Carregando...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alunos Section -->
+        <section id="alunos" class="content-section">
+            <div class="section-header">
+                <h2>Gerenciamento de Alunos</h2>
+                <button class="btn btn-primary" id="add-aluno-btn">
+                    <i class="fas fa-plus"></i> Novo Aluno
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar aluno..." id="search-aluno">
+                </div>
+                <select id="filter-status">
+                    <option value="">Todos os Status</option>
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                    <option value="suspenso">Suspenso</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Plano</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados carregados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="btn-pagination" id="prev-page" disabled>Anterior</button>
+                <span class="pagination-info" id="pagination-info">Carregando...</span>
+                <button class="btn-pagination" id="next-page">Próximo</button>
+            </div>
+        </section>
+
+        <!-- Pagamentos Section -->
+        <section id="pagamentos" class="content-section">
+            <div class="section-header">
+                <h2>Gerenciamento de Pagamentos</h2>
+                <button class="btn btn-primary" id="add-pagamento-btn">
+                    <i class="fas fa-plus"></i> Novo Pagamento
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar pagamento..." id="search-pagamento">
+                </div>
+                <select id="filter-pagamento-status">
+                    <option value="">Todos os Status</option>
+                    <option value="pago">Pago</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="atrasado">Atrasado</option>
+                </select>
+                <input type="month" id="filter-mes" class="date-filter">
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Aluno</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Método</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados carregados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Relatórios Section -->
+        <section id="relatorios" class="content-section">
+            <div class="section-header">
+                <h2>Relatórios</h2>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Relatório Financeiro</h3>
+                    <p>Visualize receitas, despesas e lucros</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório de Alunos</h3>
+                    <p>Lista completa de alunos e status</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório de Inadimplência</h3>
+                    <p>Alunos com pagamentos em atraso</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+                <div class="report-card">
+                    <h3>Relatório Mensal</h3>
+                    <p>Resumo completo do mês</p>
+                    <button class="btn btn-outline">Gerar Relatório</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configurações Section -->
+        <section id="configuracoes" class="content-section">
+            <div class="section-header">
+                <h2>Configurações</h2>
+            </div>
+
+            <div class="config-grid">
+                <div class="config-card">
+                    <h3>Configurações Gerais</h3>
+                    <form class="config-form">
+                        <div class="form-group">
+                            <label>Nome da Academia</label>
+                            <input type="text" value="Academia Paulo Coelho">
+                        </div>
+                        <div class="form-group">
+                            <label>Email de Contato</label>
+                            <input type="email" value="contato@academiapc.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone</label>
+                            <input type="tel" value="(11) 99999-9999">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+
+                <div class="config-card">
+                    <h3>Valores dos Planos</h3>
+                    <form class="config-form">
+                        <div class="form-group">
+                            <label>Plano Mensal</label>
+                            <input type="number" value="120" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Plano Trimestral</label>
+                            <input type="number" value="320" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Plano Anual</label>
+                            <input type="number" value="1200" step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para Novo Aluno -->
+    <div id="modal-aluno" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Aluno</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" name="cpf" required maxlength="14" placeholder="000.000.000-00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone *</label>
+                        <input type="tel" name="telefone" required maxlength="15" placeholder="(11) 99999-9999">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de Nascimento</label>
+                        <input type="date" name="dataNascimento">
+                    </div>
+                    <div class="form-group">
+                        <label>Plano</label>
+                        <select name="plano">
+                            <option value="mensal">Mensal - R$ 120,00</option>
+                            <option value="trimestral">Trimestral - R$ 320,00</option>
+                            <option value="anual">Anual - R$ 1.200,00</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>CEP</label>
+                        <input type="text" id="cep-aluno" name="cep" placeholder="00000-000" maxlength="9">
+                    </div>
+                    <div class="form-group">
+                        <label>Endereço</label>
+                        <input type="text" id="endereco-aluno" name="endereco">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Número</label>
+                        <input type="text" id="numero-aluno" name="numero">
+                    </div>
+                    <div class="form-group">
+                        <label>Bairro</label>
+                        <input type="text" id="bairro-aluno" name="bairro">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text" id="cidade-aluno" name="cidade">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Aluno</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Novo Pagamento -->
+    <div id="modal-pagamento" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Pagamento</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Aluno *</label>
+                        <select name="alunoId" required>
+                            <option value="">Selecione um aluno</option>
+                            <!-- Carregado dinamicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor *</label>
+                        <input type="number" name="valor" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de Vencimento *</label>
+                        <input type="date" name="vencimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Método de Pagamento</label>
+                        <select name="metodo">
+                            <option value="pix">PIX</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="cartao">Cartão</option>
+                            <option value="dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea name="observacoes" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Scripts modulares -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/notification-service.js"></script>
+    <script src="js/validation-utils.js"></script>
+    <script src="js/alunos-service.js"></script>
+    <script src="js/pagamentos-service.js"></script>
+    <script src="js/dashboard-service.js"></script>
+    <script src="js/configuracoes-service.js"></script>
+    <script src="js/admin-app.js"></script>
+
+    <style>
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            text-align: center;
+        }
+
+        .loading-spinner i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        .loading-placeholder {
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+        }
+
+        .empty-state {
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .status-badge.paid {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.overdue {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+
+        .recent-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-info span {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        /* Ajuste do modal de pagamento */
+        #modal-pagamento .modal-content {
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #modal-pagamento .modal-form {
+            padding: 0.5rem;
+        }
+
+        #modal-pagamento .form-row {
+            margin-bottom: 1rem;
+        }
+
+        #modal-pagamento .form-group {
+            margin-bottom: 1rem;
+        }
+
+        #modal-pagamento .form-group label {
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        #modal-pagamento .form-group input,
+        #modal-pagamento .form-group select,
+        #modal-pagamento .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <script>
+        // Remove loading screen após carregar tudo
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                    setTimeout(() => {
+                        loadingScreen.remove();
+                    }, 300);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

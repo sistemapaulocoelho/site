@@ -440,9 +440,9 @@ body {
 
 /* Action Buttons */
 .btn-action {
-    background: none;
-    border: none;
-    padding: 8px;
+    background: none !important;
+    border: none !important;
+    padding: 0px;
     border-radius: 5px;
     cursor: pointer;
     margin: 0 2px;
@@ -450,7 +450,8 @@ body {
 }
 
 .btn-action.edit {
-    color: #dc2626;
+    color: #000000;
+    background: none !important;
 }
 
 .btn-action.edit:hover {
@@ -562,10 +563,12 @@ body {
 
 /* Forms */
 .config-form,
+.planos-form,
 .modal-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    text-align: center;
 }
 
 .form-row {

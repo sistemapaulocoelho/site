@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Academia Paulo Coelho</title>
+    <title>Esqueci a Senha - Academia Paulo Coelho</title>
     <link rel="icon" type="image/x-icon" href="../assets/favico2.ico">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/Login-respons.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
     <div class="login-container">
         <div class="login-card">
@@ -19,39 +17,22 @@
                     <img src="../assets/Logo.png" alt="Academia Paulo Coelho" class="logo-image">
                 </div>
                 <h1>Academia Paulo Coelho</h1>
-                <p>Painel Administrativo</p>
+                <p>Recuperação de Senha</p>
             </div>
 
-            <form class="login-form" id="loginForm">
+            <form class="login-form" id="forgotPasswordForm">
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Digite seu e-mail</label>
                     <div class="input-group">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" required placeholder="Digite seu email"
-                            autocomplete="off">
+                        <input type="email" id="email" name="email" required placeholder="Digite seu e-mail" autocomplete="off">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" required placeholder="Digite sua senha"
-                            autocomplete="off">
-                        <button type="button" class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-options">
-                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginBtn">
-                    <span class="btn-text">Entrar</span>
+                <button type="submit" class="login-btn" id="sendEmailBtn">
+                    <span class="btn-text">Enviar Link de Redefinição</span>
                     <span class="btn-loading hidden">
-                        <i class="fas fa-spinner fa-spin"></i> Verificando...
+                        <i class="fas fa-spinner fa-spin"></i> Enviando...
                     </span>
                 </button>
             </form>
@@ -87,27 +68,23 @@
         // Inicializa o Firebase
         firebase.initializeApp(firebaseConfig);
 
-        // Função de login
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        // Função para envio de e-mail de redefinição de senha
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
 
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(function (userCredential) {
-                    var user = userCredential.user;
-                    console.log('Usuário logado:', user.email);
-                    // Redirecionar para o painel ou outra página
-                    window.location.href = 'painel.html';  // Altere para a URL desejada
+            // Envia o e-mail de redefinição de senha
+            firebase.auth().sendPasswordResetEmail(email)
+                .then(function() {
+                    alert("Um link para redefinir sua senha foi enviado para o seu email.");
+                    window.location.href = 'login.html';  // Redireciona de volta para a página de login
                 })
-                .catch(function (error) {
-                    var errorCode = error.code;
+                .catch(function(error) {
                     var errorMessage = error.message;
-                    alert('Erro: ' + errorMessage);
+                    alert('Erro ao enviar o email: ' + errorMessage);
                 });
         });
     </script>
 </body>
-
 </html>

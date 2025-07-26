@@ -226,13 +226,13 @@ body {
 /* Link "Esqueceu a senha" */
 .forgot-password {
   font-size: 0.9rem; /* Fonte menor */
-  color: #ffb9b9;
+  color: #ffb9b9 !important; /* Cor mais clara */
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
-  color: #ff0000;
+  color: #ff0000 !important; /* Cor mais intensa ao passar o mouse */
   text-decoration: underline;
 }
 

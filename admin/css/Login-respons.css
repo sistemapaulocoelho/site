@@ -54,7 +54,7 @@
 
   .forgot-password {
     font-size: 0.9rem; /* Ainda menor em mobile */
-    color: #ff0000;
+    color: #ff0000 !important; /* Cor mais clara */
   }
 
   .header {
@@ -346,7 +346,7 @@
   }
 
   .forgot-password {
-    color: #dc2626;
+    color: #dc2626 !important;
     text-decoration: underline;
     font-weight: bold;
   }
