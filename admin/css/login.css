@@ -347,20 +347,41 @@ body {
 }
 
 /* Error Messages */
+/* Estilo das mensagens de erro */
 .error-message {
-  background: #fef2f2;
-  color: #991b1b;
-  padding: 12px 15px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  background: #fff3cd;
+  color: #856404;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
   margin-bottom: 20px;
-  border: 1px solid #fecaca;
+  border: 1px solid #ffeeba;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.error-message i {
+  font-size: 1.4rem;
+}
+
+.error-message .message-text {
+  flex-grow: 1;
+  word-wrap: break-word;
+}
+
+.error-message.hidden {
+  display: none;
+}
+
+.error-message.shake {
   animation: shake 0.5s ease-in-out;
 }
 
 @keyframes shake {
-  0%,
-  100% {
+  0% {
     transform: translateX(0);
   }
   25% {
@@ -369,7 +390,11 @@ body {
   75% {
     transform: translateX(5px);
   }
+  100% {
+    transform: translateX(0);
+  }
 }
+
 
 /* Success Messages */
 .success-message {

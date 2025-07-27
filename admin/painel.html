@@ -31,12 +31,19 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <img src="../assets/Logo.png" alt="Paulo Coelho" class="admin-logo">
-            <h2>Paulo Coelho</h2>
+            <div class="user-info">
+                <!-- Primeiro Nome -->
+                <span id="primeiro-nome">Nome</span>
+                <!-- Função do Usuário -->
+                <span id="funcao-usuario" class="funcao-texto">Função</span>
+                <!-- Nome Fixo "Paulo Coelho" -->
+                <span id="nome-academia">Paulo Coelho</span>
+            </div>
         </div>
         <nav class="sidebar-nav">
             <ul>
                 <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
-                        <i class="fas fa-chart-dashboard"></i> Dashboard
+                        <i class="fas fa-chart-line"></i> Dashboard
                     </a></li>
                 <li><a href="#alunos" class="nav-link" data-section="alunos">
                         <i class="fas fa-users"></i> Alunos
@@ -54,7 +61,7 @@
         </nav>
         <div class="sidebar-footer">
             <a href="#" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Sair
+                <i class="fas fa-sign-out-alt"></i>Sair
             </a>
         </div>
     </div>
@@ -71,7 +78,6 @@
             </div>
             <div class="header-right">
                 <div class="user-info">
-                    <span>Bem-vindo, Admin</span>
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
                     </div>
@@ -80,6 +86,7 @@
         </header>
 
         <!-- Dashboard Section -->
+        <!-- INÍCIO ############################################3 -->
         <section id="dashboard" class="content-section active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -136,8 +143,10 @@
                 </div>
             </div>
         </section>
+        <!-- ## FINAL ############################################3 -->
 
         <!-- Alunos Section -->
+        <!-- INÍCIO ############################################ -->
         <section id="alunos" class="content-section">
             <div class="section-header">
                 <h2>Gerenciamento de Alunos</h2>
@@ -184,8 +193,10 @@
                 <button class="btn-pagination" id="next-page">Próximo</button>
             </div>
         </section>
+        <!-- ## FINAL ############################################ -->
 
         <!-- Pagamentos Section -->
+        <!-- INÍCIO ############################################ -->
         <section id="pagamentos" class="content-section">
             <div class="section-header">
                 <h2>Gerenciamento de Pagamentos</h2>
@@ -227,8 +238,9 @@
                 </table>
             </div>
         </section>
+        <!-- ## FINAL ############################################ -->
 
-        <!-- Relatórios Section -->
+        <!-- INÍCIO Relatório ########################################## -->
         <section id="relatorios" class="content-section">
             <div class="section-header">
                 <h2>Relatórios</h2>
@@ -257,13 +269,15 @@
                 </div>
             </div>
         </section>
+        <!-- ## FINAL ######################################## -->
 
-        <!-- Configurações Section -->
+
+        <!-- INÍCIO Configurações ##################################### -->
         <section id="configuracoes" class="content-section">
             <div class="section-header">
                 <h2>Configurações</h2>
             </div>
-
+            <!-- Config Gerais -->
             <div class="config-grid">
                 <div class="config-card">
                     <h3>Configurações Gerais</h3>
@@ -283,7 +297,7 @@
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
                 </div>
-
+                <!-- Card Planos -->
                 <div class="config-card">
                     <h3>Valores dos Planos</h3>
                     <form class="planos-form">
@@ -304,9 +318,11 @@
                 </div>
             </div>
         </section>
+        <!-- ## FINAL ################################################### -->
     </div>
 
-    <!-- Modal para Novo Aluno -->
+    <!-- Modal Novo Aluno -->
+    <!-- INÍCIO ############################################ -->
     <div id="modal-aluno" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -337,7 +353,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Data de Nascimento</label>
-                        <input type="date" name="dataNascimento">
+                        <input type="date" name="dataNascimento" required>
                     </div>
                     <div class="form-group">
                         <label>Plano</label>
@@ -388,8 +404,10 @@
             </form>
         </div>
     </div>
+    <!-- ## FINAL ############################################ -->
 
-    <!-- Modal para Novo Pagamento -->
+    <!-- Modal Novo Pagamento -->
+    <!-- INÍCIO ############################################ -->
     <div id="modal-pagamento" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -436,6 +454,7 @@
             </form>
         </div>
     </div>
+    <!-- ## FINAL ############################################ -->
 
     <!-- Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -573,14 +592,17 @@
         // Inicializando o Firestore
         const db = firebase.firestore();
 
-
-
-
-
         // DASHBOARD
-        // ###################################################
+        // INÍCIO ###################################################
         // Função para carregar os dados do Firestore
         function loadDashboardData() {
+
+            // Log do localStorage para verificar os dados armazenados
+            console.log("Dados armazenados no localStorage:");
+            console.log("Nome: ", localStorage.getItem('nomeUsuario'));
+            console.log("Email: ", localStorage.getItem('emailUsuario'));
+            console.log("Função: ", localStorage.getItem('funcaoUsuario'));
+
             // Referência à coleção de alunos
             db.collection("alunos").get().then((querySnapshot) => {
                 let totalAlunos = querySnapshot.size;
@@ -619,14 +641,14 @@
                 });
             });
         }
-        // ###################################################
+        // FIM ###################################################
 
 
 
 
 
         // ALUNOS
-        // ###################################################
+        // INÍCIO ###################################################
         // Função para carregar os alunos
         function loadAlunos() {
             db.collection("alunos").get().then((querySnapshot) => {
@@ -638,18 +660,15 @@
                     const alunoItem = document.createElement("tr");
 
                     alunoItem.innerHTML = `
-                    <td>${aluno.matricula}</td>
+                    <td style="text-align: center;">${aluno.matricula}</td>
                     <td>${aluno.nome}</td>
                     <td>${aluno.email}</td>
-                    <td>${aluno.telefone}</td>
-                    <td>${aluno.plano}</td>
+                    <td style="text-align: center;">${aluno.telefone}</td>
+                    <td style="text-align: center;">${aluno.plano}</td>
                     <td><span class="status-badge ${aluno.status}">${aluno.status}</span></td>
-                    <td>
+                    <td style="text-align: center;">
                         <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editAluno('${doc.id}')">
                             <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-action delete" title="Excluir" data-id="${doc.id}" onclick="deleteAluno('${doc.id}')">
-                            <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 `;
@@ -708,32 +727,18 @@
             });
         }
 
-        // Função para excluir um aluno
-        function deleteAluno(alunoId) {
-            if (confirm("Tem certeza que deseja excluir este aluno?")) {
-                db.collection("alunos").doc(alunoId).delete()
-                    .then(() => {
-                        alert("Aluno excluído com sucesso!");
-                        loadAlunos(); // Recarregar a lista de alunos
-                    })
-                    .catch(error => {
-                        console.error("Erro ao excluir aluno: ", error);
-                    });
-            }
-        }
-
         // Função para gerar matrícula (caso seja necessário)
         function generateMatricula() {
             return 'MAT' + Math.floor(Math.random() * 1000000);
         }
-        // ###################################################
+        // FINAL ###################################################
 
 
 
 
 
         // PAGAMENTOS
-        // ###################################################
+        // INÍCIO ###################################################
         // Função para carregar os pagamentos
         function loadPagamentos() {
             db.collection("pagamentos").get().then((querySnapshot) => {
@@ -745,13 +750,13 @@
                     const pagamentoItem = document.createElement("tr");
 
                     pagamentoItem.innerHTML = `
-                    <td>${pagamento.matricula}</td>
+                    <td style="text-align: center;">${pagamento.matricula}</td>
                     <td>${pagamento.aluno}</td>
-                    <td>R$ ${pagamento.valor.toFixed(2)}</td>
-                    <td>${pagamento.vencimento.toDate().toLocaleDateString()}</td>
-                    <td><span class="status-badge ${pagamento.status}">${pagamento.status}</span></td>
-                    <td>${pagamento.metodo}</td>
-                    <td>
+                    <td style="text-align: center;">R$ ${pagamento.valor.toFixed(2)}</td>
+                    <td style="text-align: center;">${pagamento.vencimento.toDate().toLocaleDateString()}</td>
+                    <td style="text-align: center;"><span class="status-badge ${pagamento.status}">${pagamento.status}</span></td>
+                    <td style="text-align: center;">${pagamento.metodo}</td>
+                    <td style="text-align: center;">
                         <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editPagamento('${doc.id}')">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -833,14 +838,13 @@
         function generateMatriculaPagamento() {
             return 'PGT' + Math.floor(Math.random() * 1000000);
         }
-        // ###################################################
+        // FINAL ###################################################
 
 
 
 
 
-        // CONFIGURAÇÕES
-        // ###################################################
+        // INÍCIO CONFIGURAÇÕES ###################################################
         // Função para carregar as configurações do Firestore
         function loadConfiguracoes() {
             // configID
@@ -934,10 +938,13 @@
                 console.error("Formulário não encontrado");
             }
         });
-        // ###################################################
+        // ## FINAL CONFIGURAÇÕES ###################################################
 
 
-        // Função de navegação entre as seções
+
+
+
+        // INÍCIO NAVEGÃO ###################################################
         const navLinks = document.querySelectorAll(".nav-link");
         navLinks.forEach(link => {
             link.addEventListener("click", function (event) {
@@ -955,9 +962,15 @@
                 document.getElementById(sectionId).classList.add("active");
             });
         });
+        // ## FINAL NAVEGAÇÃO ###################################################
 
+
+
+
+
+        // INÍCIO DOM ###################################################
         document.addEventListener('DOMContentLoaded', function () {
-            // Elementos do DOM
+            // INÍCIO sidebar ###################################################
             const navLinks = document.querySelectorAll('.nav-link');
             const contentSections = document.querySelectorAll('.content-section');
             const pageTitle = document.getElementById('page-title');
@@ -1014,7 +1027,142 @@
                     }
                 }
             });
+            // ## FINAL sidebar ###################################################
+
+
+
+
+
+            // INÍCIO Modais ###################################################
+            // Fechar modais
+            modalCloses.forEach(close => {
+                close.addEventListener('click', function () {
+                    modals.forEach(modal => modal.classList.remove('active'));
+                });
+            });
+            // ## FINAL Modais ###################################################
+
+
+
+
+            // INÍCIO Filtros ###################################################
+            const filterStatus = document.getElementById('filter-status');
+            const filterPagamentoStatus = document.getElementById('filter-pagamento-status');
+            const filterMes = document.getElementById('filter-mes');
+
+            if (filterStatus) {
+                filterStatus.addEventListener('change', function () {
+                    const filterValue = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('#alunos .data-table tbody tr');
+
+                    tableRows.forEach(row => {
+                        if (filterValue === '') {
+                            row.style.display = '';
+                        } else {
+                            const statusBadge = row.querySelector('.status-badge');
+                            const statusText = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+
+                            if (statusText.includes(filterValue)) {
+                                row.style.display = '';
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+
+            if (filterPagamentoStatus) {
+                filterPagamentoStatus.addEventListener('change', function () {
+                    const filterValue = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('#pagamentos .data-table tbody tr');
+
+                    tableRows.forEach(row => {
+                        if (filterValue === '') {
+                            row.style.display = '';
+                        } else {
+                            const statusBadge = row.querySelector('.status-badge');
+                            const statusText = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+
+                            if (statusText.includes(filterValue)) {
+                                row.style.display = '';
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+            // ## FINAL Filtros ###################################################
+
+
+
+
+
+            // INÍCIO TABELA ###################################################
+            document.addEventListener('click', function (e) {
+                // Botão de editar
+                if (e.target.closest('.btn-action.edit')) {
+                    const row = e.target.closest('tr');
+                    const id = row.querySelector('td').textContent;
+                    console.log('Editar item:', id);
+                    // Aqui você implementaria a lógica de edição
+                    showNotification('Função de edição será implementada', 'info');
+                }
+
+                // Botão de visualizar
+                if (e.target.closest('.btn-action.view')) {
+                    const row = e.target.closest('tr');
+                    const id = row.querySelector('td').textContent;
+                    console.log('Visualizar item:', id);
+                    // Aqui você implementaria a lógica de visualização
+                    showNotification('Função de visualização será implementada', 'info');
+                }
+
+                // Botão de excluir
+                if (e.target.closest('.btn-action.delete')) {
+                    const row = e.target.closest('tr');
+                    const id = row.querySelector('td').textContent;
+
+                    if (confirm('Tem certeza que deseja excluir este item?')) {
+                        console.log('Excluir item:', id);
+                        // Aqui você implementaria a lógica de exclusão
+                        showNotification('Item excluído com sucesso', 'success');
+                        row.remove();
+                    }
+                }
+            });
+            // ## FINAL TABELA ###################################################
+
+
         });
+        // ## FINAL DOM ###################################################
+
+
+// INÍCIO carregar Localstorage ####################################################
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Recupera o nome do usuário, função e outros dados do localStorage
+            const nomeUsuario = localStorage.getItem('nomeUsuario'); // Nome completo
+            const funcaoUsuario = localStorage.getItem('funcaoUsuario'); // Função
+            const nomeAcademia = "Paulo Coelho"; // Nome fixo, conforme solicitado
+
+            // Atribui o primeiro nome ao span #primeiro-nome
+            if (nomeUsuario) {
+                const primeiroNome = nomeUsuario.split(' ')[0]; // Extrai o primeiro nome
+                document.getElementById('primeiro-nome').textContent = primeiroNome;
+            }
+
+            // Atribui a função ao span #funcao-usuario
+            if (funcaoUsuario) {
+                document.getElementById('funcao-usuario').textContent = funcaoUsuario;
+            }
+
+            // Atribui o nome completo fixo ao span #nome-completo
+            document.getElementById('nome-academia').textContent = nomeAcademia;
+        });
+// ## FINAL carregar Localstorage ####################################################2
+
+
 
         // Carregar os dados ao carregar a página
         window.addEventListener("load", function () {

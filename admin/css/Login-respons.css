@@ -52,11 +52,6 @@
     margin-top: 0px; /* Ainda mais próximo em mobile */
   }
 
-  .forgot-password {
-    font-size: 0.9rem; /* Ainda menor em mobile */
-    color: #ff0000 !important; /* Cor mais clara */
-  }
-
   .header {
     position: sticky;
     top: 0;
