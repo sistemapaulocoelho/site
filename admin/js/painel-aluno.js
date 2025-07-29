@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Elementos do DOM
     const navLinks = document.querySelectorAll('.nav-link');
     const contentSections = document.querySelectorAll('.content-section');
@@ -13,19 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Navegação entre seções
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetSection = this.getAttribute('data-section');
-            
+
             // Remove active de todos os links e seções
             navLinks.forEach(nav => nav.classList.remove('active'));
             contentSections.forEach(section => section.classList.remove('active'));
-            
+
             // Adiciona active ao link clicado e seção correspondente
             this.classList.add('active');
             document.getElementById(targetSection).classList.add('active');
-            
+
             // Atualiza título da página
             const sectionTitles = {
                 'dados-pessoais': 'Dados Pessoais',
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 'horarios': 'Horários',
                 'notificacoes': 'Notificações'
             };
-            
+
             pageTitle.textContent = sectionTitles[targetSection] || 'Dados Pessoais';
-            
+
             // Fecha sidebar no mobile
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
@@ -45,13 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Toggle sidebar mobile
     if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
+        sidebarToggle.addEventListener('click', function () {
             sidebar.classList.toggle('active');
         });
     }
 
     // Fecha sidebar ao clicar fora (mobile)
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (window.innerWidth <= 768) {
             if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
                 sidebar.classList.remove('active');
@@ -67,28 +67,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Abrir modal de editar perfil
     if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', function() {
+        editProfileBtn.addEventListener('click', function () {
             modalEditProfile.classList.add('active');
         });
     }
 
     // Abrir modal PIX
     if (payNowBtn) {
-        payNowBtn.addEventListener('click', function() {
+        payNowBtn.addEventListener('click', function () {
             generatePIX();
         });
     }
 
     // Fechar modais
     modalCloses.forEach(close => {
-        close.addEventListener('click', function() {
+        close.addEventListener('click', function () {
             modals.forEach(modal => modal.classList.remove('active'));
         });
     });
 
     // Fechar modal ao clicar fora
     modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
+        modal.addEventListener('click', function (e) {
             if (e.target === modal) {
                 modal.classList.remove('active');
             }
@@ -98,22 +98,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Formulário de editar perfil
     const editForm = document.querySelector('#modal-edit-profile .modal-form');
     if (editForm) {
-        editForm.addEventListener('submit', function(e) {
+        editForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            
+
             submitBtn.innerHTML = '<span class="loading"></span> Salvando...';
             submitBtn.disabled = true;
-            
+
             setTimeout(() => {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-                
+
                 modalEditProfile.classList.remove('active');
                 showNotification('Dados atualizados com sucesso!', 'success');
-                
+
                 // Aqui você implementaria a atualização real dos dados
                 // updateUserProfile(formData);
             }, 2000);
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Ações dos botões de notificação
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.notification-action')) {
             generatePIX();
         }
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Inicialização
     console.log('Painel do aluno carregado com sucesso!');
-    
+
     // Verifica se há pagamentos pendentes
     checkPendingPayments();
 });
@@ -146,11 +146,11 @@ function loadUserData() {
     const userName = localStorage.getItem('nomeUsuario') || 'Usuário';
     const userEmail = localStorage.getItem('emailUsuario') || '';
     const userFunction = localStorage.getItem('funcaoUsuario') || 'Aluno';
-    
+
     // Atualiza elementos da interface
     document.getElementById('primeiro-nome').textContent = userName.split(' ')[0];
     document.getElementById('funcao-usuario').textContent = userFunction;
-    
+
     // Atualiza dados do perfil (aqui você buscaria do Firebase)
     updateProfileDisplay({
         name: userName,
@@ -188,7 +188,7 @@ function updateProfileDisplay(userData) {
 // Função para gerar PIX
 function generatePIX() {
     const modal = document.getElementById('modal-pix');
-    
+
     // Aqui você integraria com a API do InfinitPay
     const pixData = {
         month: 'Fevereiro 2024',
@@ -196,15 +196,15 @@ function generatePIX() {
         due: '15/02/2024',
         code: '00020126360014BR.GOV.BCB.PIX0114+5511999999999520400005303986540515.005802BR5925ACADEMIA PAULO COELHO LTDA6009SAO PAULO62070503***63041234'
     };
-    
+
     // Atualiza modal com dados do PIX
     document.getElementById('pix-month').textContent = pixData.month;
     document.getElementById('pix-value').textContent = pixData.value;
     document.getElementById('pix-due').textContent = pixData.due;
     document.getElementById('pix-code').value = pixData.code;
-    
+
     modal.classList.add('active');
-    
+
     showNotification('PIX gerado com sucesso!', 'success');
 }
 
@@ -213,7 +213,7 @@ function copyPixCode() {
     const pixCode = document.getElementById('pix-code');
     pixCode.select();
     pixCode.setSelectionRange(0, 99999); // Para mobile
-    
+
     try {
         document.execCommand('copy');
         showNotification('Código PIX copiado!', 'success');
@@ -226,7 +226,7 @@ function copyPixCode() {
 // Função para baixar comprovante
 function downloadReceipt(month) {
     showNotification(`Baixando comprovante de ${month}...`, 'info');
-    
+
     // Aqui você implementaria o download real do comprovante
     setTimeout(() => {
         showNotification('Comprovante baixado!', 'success');
@@ -237,7 +237,7 @@ function downloadReceipt(month) {
 function checkPendingPayments() {
     // Aqui você verificaria no Firebase se há pagamentos pendentes
     const hasPendingPayment = true; // Simulado
-    
+
     if (hasPendingPayment) {
         // Adiciona indicador visual ou notificação
         console.log('Pagamento pendente detectado');
@@ -250,9 +250,10 @@ function logout() {
         localStorage.removeItem('nomeUsuario');
         localStorage.removeItem('emailUsuario');
         localStorage.removeItem('funcaoUsuario');
-        
+        localStorage.removeItem('nomeAcademia');
+
         showNotification('Saindo...', 'info');
-        
+
         setTimeout(() => {
             window.location.href = 'login.html';
         }, 1000);
@@ -400,7 +401,7 @@ class InfinitPayAPI {
 // Função para integrar com InfinitPay (exemplo de uso)
 async function createInfinitPayPixPayment() {
     const infinitPay = new InfinitPayAPI('your-api-key-here');
-    
+
     const paymentData = {
         amount: 15000, // R$ 150,00 em centavos
         customerName: localStorage.getItem('nomeUsuario'),
@@ -411,13 +412,13 @@ async function createInfinitPayPixPayment() {
 
     try {
         const payment = await infinitPay.createPixPayment(paymentData);
-        
+
         // Atualiza modal com dados reais do PIX
         document.getElementById('pix-code').value = payment.pix_code;
-        
+
         // Gera QR Code (você pode usar uma biblioteca como qrcode.js)
         generateQRCode(payment.pix_code);
-        
+
         showNotification('PIX gerado com sucesso!', 'success');
     } catch (error) {
         showNotification('Erro ao gerar PIX. Tente novamente.', 'error');
@@ -428,10 +429,10 @@ async function createInfinitPayPixPayment() {
 function generateQRCode(pixCode) {
     // Você precisaria incluir a biblioteca qrcode.js
     // <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    
+
     const qrContainer = document.querySelector('.qr-placeholder');
     qrContainer.innerHTML = ''; // Limpa placeholder
-    
+
     if (window.QRCode) {
         QRCode.toCanvas(qrContainer, pixCode, {
             width: 200,

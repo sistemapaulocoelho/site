@@ -479,16 +479,17 @@
 
     <script type="module">
         // Verificação de acesso - só permite alunos
-        document.addEventListener('DOMContentLoaded', function() {
-            const funcaoUsuario = localStorage.getItem('funcaoUsuario');
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const funcaoUsuario = localStorage.getItem('funcaoUsuario');
             
-            // Se não é aluno, redireciona para login
-            if (funcaoUsuario !== 'Aluno') {
-                alert('Acesso restrito a alunos. Redirecionando para login...');
-                window.location.href = 'login.html';
-                return;
-            }
-        });
+        //     // Se não é aluno, redireciona para login
+        //     if (funcaoUsuario !== 'Aluno') {
+        //         alert('Acesso restrito a alunos. Redirecionando para login...');
+        //         window.location.href = 'login.html';
+        //         return;
+        //     }
+        // });
+        
     </script>
     <script src="js/painel-aluno.js"></script>
 </body>

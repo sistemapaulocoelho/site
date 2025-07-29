@@ -66,7 +66,7 @@
             </ul>
         </nav>
         <div class="sidebar-footer">
-            <a href="#" class="logout-btn">
+            <a href="#" class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i>Sair
             </a>
         </div>
@@ -544,7 +544,9 @@
 
     <!-- Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
 
     <style>
         .loading-screen {
@@ -779,20 +781,31 @@
                 email: event.target.email.value,
                 telefone: event.target.telefone.value,
                 plano: event.target.plano.value,
-                status: 'ativo', // Definindo o status como ativo por padrão
-                matricula: generateMatricula(), // Função para gerar matrícula (se necessário)
+                status: 'ativo',
+                matricula: generateMatricula(),
                 dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             };
 
-            db.collection("alunos").add(aluno)
-                .then(() => {
-                    alert("Aluno cadastrado com sucesso!");
-                    loadAlunos(); // Recarregar a lista de alunos
-                    document.getElementById("modal-aluno").classList.remove("active");
-                    document.querySelector("#modal-aluno form").reset();
+            // Criar usuário no Firebase Authentication
+            firebase.auth().createUserWithEmailAndPassword(aluno.email, event.target.senha.value)
+                .then((userCredential) => {
+                    // Obter UID do usuário autenticado
+                    const uid = userCredential.user.uid;
+
+                    // Adicionar dados do aluno no Firestore
+                    db.collection("alunos").doc(uid).set(aluno)
+                        .then(() => {
+                            alert("Aluno cadastrado com sucesso!");
+                            loadAlunos();
+                            document.getElementById("modal-aluno").classList.remove("active");
+                            document.querySelector("#modal-aluno form").reset();
+                        })
+                        .catch((error) => {
+                            console.error("Erro ao cadastrar aluno no Firestore: ", error);
+                        });
                 })
-                .catch(error => {
-                    console.error("Erro ao cadastrar aluno: ", error);
+                .catch((error) => {
+                    console.error("Erro ao criar usuário: ", error);
                 });
         });
 
@@ -1071,9 +1084,6 @@
             });
         }
 
-
-
-
         // Função para adicionar um novo usuário
         document.getElementById("add-usuario-btn").addEventListener("click", () => {
             const modal = document.getElementById("modal-usuario");
@@ -1130,7 +1140,22 @@
         // ## FINAL NAVEGAÇÃO ###################################################
 
 
+        // Função para logout
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                localStorage.removeItem('nomeUsuario');
+                localStorage.removeItem('emailUsuario');
+                localStorage.removeItem('funcaoUsuario');
 
+                localStorage.removeItem('nomeAcademia');
+
+                showNotification('Saindo...', 'info');
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+        }
 
         // NOTIFICAÇÃO
         // INÍCIO ###################################################
