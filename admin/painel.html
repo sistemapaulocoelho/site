@@ -28,6 +28,7 @@
     </div>
 
     <!-- Sidebar -->
+    <!-- INICIO ############################################# -->
     <div class="sidebar">
         <div class="sidebar-header">
             <img src="../assets/Logo.png" alt="Paulo Coelho" class="admin-logo">
@@ -56,7 +57,12 @@
                     </a></li>
                 <li><a href="#configuracoes" class="nav-link" data-section="configuracoes">
                         <i class="fas fa-cog"></i> Configurações
-                    </a></li>
+                    </a>
+                </li>
+                <li><a href="#usuarios" class="nav-link" data-section="usuarios">
+                        <i class="fas fa-users"></i> Usuários
+                    </a>
+                </li>
             </ul>
         </nav>
         <div class="sidebar-footer">
@@ -65,8 +71,11 @@
             </a>
         </div>
     </div>
+    <!-- ## FINAL ############################################# -->
+
 
     <!-- Main Content -->
+    <!-- Janelas ####################################### -->
     <div class="main-content">
         <!-- Header -->
         <header class="header">
@@ -271,12 +280,12 @@
         </section>
         <!-- ## FINAL ######################################## -->
 
-
         <!-- INÍCIO Configurações ##################################### -->
         <section id="configuracoes" class="content-section">
             <div class="section-header">
                 <h2>Configurações</h2>
             </div>
+
             <!-- Config Gerais -->
             <div class="config-grid">
                 <div class="config-card">
@@ -319,7 +328,45 @@
             </div>
         </section>
         <!-- ## FINAL ################################################### -->
+
+        <!-- Usuários Section -->
+        <!-- INÍCIO ############################################ -->
+        <section id="usuarios" class="content-section">
+            <div class="section-header">
+                <h2>Gerenciamento de Usuários</h2>
+                <button class="btn btn-primary" id="add-usuario-btn">
+                    <i class="fas fa-plus"></i> Novo Usuário
+                </button>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar usuário..." id="search-usuario">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Função</th>
+                            <th>Data de Criação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados carregados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- ## FINAL ############################################ -->
+
     </div>
+    <!-- ## FINAL ############################################ -->
 
     <!-- Modal Novo Aluno -->
     <!-- INÍCIO ############################################ -->
@@ -358,9 +405,9 @@
                     <div class="form-group">
                         <label>Plano</label>
                         <select name="plano">
-                            <option value="mensal">Mensal - R$ 120,00</option>
-                            <option value="trimestral">Trimestral - R$ 320,00</option>
-                            <option value="anual">Anual - R$ 1.200,00</option>
+                            <option value="MENSAL">Mensal - R$ 120,00</option>
+                            <option value="TRIMESTRAL">Trimestral - R$ 320,00</option>
+                            <option value="ANUAL">Anual - R$ 1.200,00</option>
                         </select>
                     </div>
                 </div>
@@ -455,6 +502,45 @@
         </div>
     </div>
     <!-- ## FINAL ############################################ -->
+
+    <!-- Modal Novo Usuário -->
+    <!-- INÍCIO ############################################ -->
+    <div id="modal-usuario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Usuário</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Função</label>
+                        <select name="funcao">
+                            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                            <option value="SENSEI">SENSEI</option>
+                            <option value="Aluno">ALUNO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Usuário</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- ## FINAL ############################################ -->
+
 
     <!-- Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -843,8 +929,8 @@
 
 
 
-
-        // INÍCIO CONFIGURAÇÕES ###################################################
+        // CONFIGURAÇÕES
+        // INÍCIO ###################################################
         // Função para carregar as configurações do Firestore
         function loadConfiguracoes() {
             // configID
@@ -942,9 +1028,88 @@
 
 
 
+        // USUÁRIOS
+        // INÍCIO ###################################################
+        // Função para carregar os usuários
+        function loadUsuarios() {
+            db.collection("usuarios").get().then((querySnapshot) => {
+                const usuariosContainer = document.querySelector("#usuarios .data-table tbody");
+                usuariosContainer.innerHTML = ''; // Limpar conteúdo anterior
+
+                querySnapshot.forEach(doc => {
+                    const usuario = doc.data();
+                    const usuarioItem = document.createElement("tr");
+
+                    usuarioItem.innerHTML = `
+                        <td>${usuario.nome}</td>
+                        <td>${usuario.email}</td>
+                        <td>${usuario.funcao}</td>
+                        <td>${usuario.dataCriacao.toDate().toLocaleDateString()}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editUsuario('${doc.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                        `;
+                    usuariosContainer.appendChild(usuarioItem);
+                });
+            });
+        }
+
+        // Função para editar um usuário
+        function editUsuario(usuarioId) {
+            const modal = document.getElementById("modal-usuario");
+            modal.classList.add("active");
+
+            db.collection("usuarios").doc(usuarioId).get().then(doc => {
+                if (doc.exists) {
+                    const usuario = doc.data();
+                    document.querySelector("input[name='nome']").value = usuario.nome;
+                    document.querySelector("input[name='email']").value = usuario.email;
+                    document.querySelector("select[name='funcao']").value = usuario.funcao;
+                }
+            });
+        }
 
 
-        // INÍCIO NAVEGÃO ###################################################
+
+
+        // Função para adicionar um novo usuário
+        document.getElementById("add-usuario-btn").addEventListener("click", () => {
+            const modal = document.getElementById("modal-usuario");
+            modal.classList.add("active");
+        });
+
+        // Função para salvar o usuário no Firestore
+        document.querySelector("#modal-usuario form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const usuario = {
+                nome: event.target.nome.value,
+                email: event.target.email.value,
+                funcao: event.target.funcao.value,
+                dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
+            };
+
+            db.collection("usuarios").add(usuario)
+                .then(() => {
+                    alert("Usuário cadastrado com sucesso!");
+                    loadUsuarios(); // Recarregar a lista de usuários
+                    document.getElementById("modal-usuario").classList.remove("active");
+                    document.querySelector("#modal-usuario form").reset();
+                })
+                .catch(error => {
+                    console.error("Erro ao cadastrar usuário: ", error);
+                });
+        });
+        // ## FINAL USUÁRIOS ###################################################
+
+
+
+
+
+        // NAVEGÃO
+        // INÍCIO ###################################################
         const navLinks = document.querySelectorAll(".nav-link");
         navLinks.forEach(link => {
             link.addEventListener("click", function (event) {
@@ -964,6 +1129,27 @@
         });
         // ## FINAL NAVEGAÇÃO ###################################################
 
+
+
+
+        // NOTIFICAÇÃO
+        // INÍCIO ###################################################
+        function showNotification(message, type = 'success') {
+            // Cria o elemento de notificação
+            const notification = document.createElement('div');
+            notification.classList.add('notification');
+            notification.classList.add(type); // Pode ser 'success', 'error', 'info', etc.
+            notification.textContent = message;
+
+            // Adiciona a notificação ao corpo da página
+            document.body.appendChild(notification);
+
+            // Define um tempo para remover a notificação após 5 segundos
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        // ## FINAL NOTIFICAÇÃO ###################################################
 
 
 
@@ -1000,7 +1186,8 @@
                         'alunos': 'Gerenciamento de Alunos',
                         'pagamentos': 'Gerenciamento de Pagamentos',
                         'relatorios': 'Relatórios',
-                        'configuracoes': 'Configurações'
+                        'configuracoes': 'Configurações',
+                        'usuarios': 'Gerenciamento dos Usuários'
                     };
 
                     pageTitle.textContent = sectionTitles[targetSection] || 'Dashboard';
@@ -1044,8 +1231,8 @@
 
 
 
-
-            // INÍCIO Filtros ###################################################
+            // Filtros
+            // INÍCIO ###################################################
             const filterStatus = document.getElementById('filter-status');
             const filterPagamentoStatus = document.getElementById('filter-pagamento-status');
             const filterMes = document.getElementById('filter-mes');
@@ -1098,8 +1285,8 @@
 
 
 
-
-            // INÍCIO TABELA ###################################################
+            // TABELA
+            // INÍCIO ###################################################
             document.addEventListener('click', function (e) {
                 // Botão de editar
                 if (e.target.closest('.btn-action.edit')) {
@@ -1139,7 +1326,7 @@
         // ## FINAL DOM ###################################################
 
 
-// INÍCIO carregar Localstorage ####################################################
+        // INÍCIO carregar Localstorage ####################################################
         window.addEventListener('DOMContentLoaded', (event) => {
             // Recupera o nome do usuário, função e outros dados do localStorage
             const nomeUsuario = localStorage.getItem('nomeUsuario'); // Nome completo
@@ -1160,7 +1347,7 @@
             // Atribui o nome completo fixo ao span #nome-completo
             document.getElementById('nome-academia').textContent = nomeAcademia;
         });
-// ## FINAL carregar Localstorage ####################################################2
+        // ## FINAL carregar Localstorage ####################################################2
 
 
 
@@ -1171,6 +1358,7 @@
             loadAlunos();
             loadPagamentos();
             loadConfiguracoes();
+            loadUsuarios();
         });
 
         // Remove loading screen após carregar tudo
