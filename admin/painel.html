@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/painel.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6/dist/inputmask.min.js"></script>
+
     <!-- Preload critical resources -->
     <link rel="preload" href="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" as="script">
     <link rel="preload" href="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js" as="script">
@@ -394,7 +396,7 @@
                     </div>
                     <div class="form-group">
                         <label>Telefone *</label>
-                        <input type="tel" name="telefone" required maxlength="15" placeholder="(11) 99999-9999">
+                        <input type="text" name="telefone" required maxlength="15" placeholder="(11) 99999-9999">
                     </div>
                 </div>
                 <div class="form-row">
@@ -472,7 +474,7 @@
                     </div>
                     <div class="form-group">
                         <label>Valor *</label>
-                        <input type="number" name="valor" step="0.01" required>
+                        <input type="text" name="valor" step="0.01" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -772,40 +774,92 @@
         });
 
         // Função para salvar o aluno no Firestore
-        document.querySelector("#modal-aluno form").addEventListener("submit", function (event) {
+        document.querySelector("#modal-aluno form").addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const aluno = {
-                nome: event.target.nome.value,
-                cpf: event.target.cpf.value,
-                email: event.target.email.value,
-                telefone: event.target.telefone.value,
-                plano: event.target.plano.value,
-                status: 'ativo',
-                matricula: generateMatricula(),
-                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            };
+            // Verifica se o CPF já está cadastrado na coleção "alunos"
+            db.collection("alunos").where("cpf", "==", event.target.cpf.value).get()
+                .then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        alert("CPF já cadastrado.");
+                    } else {
+                        // CPF não existe, então cria o novo aluno
 
-            // Criar usuário no Firebase Authentication
-            firebase.auth().createUserWithEmailAndPassword(aluno.email, event.target.senha.value)
-                .then((userCredential) => {
-                    // Obter UID do usuário autenticado
-                    const uid = userCredential.user.uid;
+                        // Espera pela matrícula única antes de prosseguir
+                        generateMatricula().then((matricula) => {
+                            const aluno = {
+                                nome: event.target.nome.value,
+                                cpf: event.target.cpf.value,
+                                email: event.target.email.value,
+                                telefone: event.target.telefone.value,
+                                plano: event.target.plano.value,
+                                status: 'ativo',
+                                matricula: matricula, // Matrícula agora é garantidamente única
+                                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                            };
 
-                    // Adicionar dados do aluno no Firestore
-                    db.collection("alunos").doc(uid).set(aluno)
-                        .then(() => {
-                            alert("Aluno cadastrado com sucesso!");
-                            loadAlunos();
-                            document.getElementById("modal-aluno").classList.remove("active");
-                            document.querySelector("#modal-aluno form").reset();
-                        })
-                        .catch((error) => {
-                            console.error("Erro ao cadastrar aluno no Firestore: ", error);
+                            // Cadastro do aluno no Firestore
+                            db.collection("alunos").add(aluno)
+                                .then((docRef) => {
+                                    // Verificar se o e-mail já está cadastrado no Firebase Authentication
+                                    firebase.auth().fetchSignInMethodsForEmail(aluno.email)
+                                        .then((methods) => {
+                                            if (methods.length > 0) {
+                                                // O e-mail já está registrado, não vamos criar novamente
+                                                alert("Este e-mail já está associado a uma conta.");
+                                            } else {
+                                                // O e-mail não está registrado, criar um novo usuário
+                                                firebase.auth().createUserWithEmailAndPassword(aluno.email, "senhaTemporaria")
+                                                    .then((userCredential) => {
+                                                        const user = userCredential.user;
+
+                                                        // Enviar e-mail de redefinição de senha
+                                                        firebase.auth().sendPasswordResetEmail(aluno.email)
+                                                            .then(() => {
+                                                                alert("Cadastro realizado com sucesso! Um e-mail foi enviado para o endereço de e-mail do usuário.");
+                                                            })
+                                                            .catch((error) => {
+                                                                console.error("Erro ao enviar e-mail de redefinição de senha:", error);
+                                                            });
+                                                    })
+                                                    .catch((error) => {
+                                                        // Aqui tratamos outros erros ao tentar criar o usuário
+                                                        if (error.code === 'auth/email-already-in-use') {
+                                                            alert("Este e-mail existente. O aluno foi associado a este.");
+                                                            alert("Aluno Cadastrado com Sucesso.");
+                                                        } else if (error.code === 'auth/invalid-email') {
+                                                            alert("E-mail inválido.");
+                                                        } else if (error.code === 'auth/weak-password') {
+                                                            alert("A senha deve ter pelo menos 6 caracteres.");
+                                                        } else {
+                                                            console.error("Erro ao criar usuário no Firebase:", error);
+                                                        }
+                                                    });
+                                            }
+
+                                            // Fechar o modal e resetar o formulário
+                                            const modalAluno = document.getElementById("modal-aluno");
+                                            if (modalAluno && modalAluno.classList.contains("active")) {
+                                                modalAluno.classList.remove("active");
+                                            }
+                                            document.querySelector("#modal-aluno form").reset();
+                                        })
+                                        .catch((error) => {
+                                            console.error("Erro ao verificar se o e-mail já está cadastrado:", error);
+                                        });
+
+
+                                })
+                                .catch((error) => {
+                                    console.error("Erro ao salvar aluno no Firestore: ", error);
+                                });
+                        }).catch((error) => {
+                            console.error("Erro ao gerar matrícula:", error);
                         });
+                    }
                 })
                 .catch((error) => {
-                    console.error("Erro ao criar usuário: ", error);
+                    console.error("Erro ao verificar CPF no Firestore:", error);
                 });
         });
 
@@ -826,9 +880,21 @@
             });
         }
 
-        // Função para gerar matrícula (caso seja necessário)
-        function generateMatricula() {
-            return 'MAT' + Math.floor(Math.random() * 1000000);
+        // Função para gerar matrícula única com async/await
+        async function generateMatricula() {
+            let matricula = Math.floor(Math.random() * 100000).toString(); // Gera uma matrícula aleatória
+
+            // Verifica se a matrícula já existe no banco de dados
+            const querySnapshot = await db.collection("alunos").where("matricula", "==", matricula).get();
+
+            // Se a matrícula já existir, gera uma nova
+            if (!querySnapshot.empty) {
+                console.log("Matrícula já existente, gerando uma nova...");
+                return generateMatricula(); // Chama novamente a função para gerar nova matrícula
+            } else {
+                console.log("Matrícula gerada: " + matricula);
+                return matricula;
+            }
         }
         // FINAL ###################################################
 
@@ -1176,7 +1242,35 @@
         }
         // ## FINAL NOTIFICAÇÃO ###################################################
 
+        // Máscaras de entrada
+        // INÍCIO ###################################################
+        function aplicarMascaras() {
+            // Máscara para CPF
+            const cpfInput = document.querySelector("input[name='cpf']");
+            if (cpfInput) {
+                Inputmask("999.999.999-99").mask(cpfInput);
+            }
 
+            // Máscara para telefone
+            const telefoneInput = document.querySelector("input[name='telefone']");
+            if (telefoneInput) {
+                Inputmask("(99) 99999-9999").mask(telefoneInput);
+            }
+
+            // Máscara para CEP
+            const cepInput = document.querySelector("input[name='cep']");
+            if (cepInput) {
+                Inputmask("99999-999").mask(cepInput);
+            }
+
+            // Máscara para data de vencimento
+            const vencimentoInput = document.querySelector("input[name='vencimento']");
+            if (vencimentoInput) {
+                Inputmask("99/99/9999").mask(vencimentoInput);
+            }
+        }
+
+        // ## FINAL Máscaras de entrada #################################
 
 
         // INÍCIO DOM ###################################################
@@ -1346,7 +1440,6 @@
             });
             // ## FINAL TABELA ###################################################
 
-
         });
         // ## FINAL DOM ###################################################
 
@@ -1384,6 +1477,7 @@
             loadPagamentos();
             loadConfiguracoes();
             loadUsuarios();
+            aplicarMascaras(); // Aplica as máscaras de entrada
         });
 
         // Remove loading screen após carregar tudo

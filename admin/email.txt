@@ -1,0 +1,70 @@
+document.querySelector("#modal-aluno form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Verifica se o CPF já está cadastrado na coleção "alunos"
+    db.collection("alunos").where("cpf", "==", event.target.cpf.value).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                alert("CPF já cadastrado.");
+            } else {
+                // CPF não existe, então cria o novo aluno
+                const aluno = {
+                    nome: event.target.nome.value,
+                    cpf: event.target.cpf.value,
+                    email: event.target.email.value,
+                    telefone: event.target.telefone.value,
+                    plano: event.target.plano.value,
+                    status: 'ativo',
+                    matricula: generateMatricula(),
+                    dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                };
+
+                // Cadastro do aluno no Firestore
+                db.collection("alunos").add(aluno)
+                    .then((docRef) => {
+                        // Verificar se o e-mail já está cadastrado no Firebase Authentication
+                        firebase.auth().fetchSignInMethodsForEmail(aluno.email)
+                            .then((methods) => {
+                                if (methods.length > 0) {
+                                    // O e-mail já está registrado, não vamos criar novamente
+                                    alert("Aluno já cadastrado com sucesso! E-mail já associado à conta.");
+                                } else {
+                                    // O e-mail não está registrado, criar um novo usuário
+                                    firebase.auth().createUserWithEmailAndPassword(aluno.email, "senhaTemporaria")
+                                        .then((userCredential) => {
+                                            const user = userCredential.user;
+
+                                            // Enviar e-mail de redefinição de senha
+                                            firebase.auth().sendPasswordResetEmail(aluno.email)
+                                                .then(() => {
+                                                    alert("Cadastro realizado com sucesso! Um e-mail foi enviado para o endereço de e-mail do usuário.");
+                                                })
+                                                .catch((error) => {
+                                                    console.error("Erro ao enviar e-mail de redefinição de senha:", error);
+                                                });
+                                        })
+                                        .catch((error) => {
+                                            console.error("Erro ao criar usuário no Firebase:", error);
+                                        });
+                                }
+
+                                // Fechar o modal e resetar o formulário
+                                const modalAluno = document.getElementById("modal-aluno");
+                                if (modalAluno && modalAluno.classList.contains("active")) {
+                                    modalAluno.classList.remove("active");
+                                }
+                                document.querySelector("#modal-aluno form").reset();
+                            })
+                            .catch((error) => {
+                                console.error("Erro ao verificar se o e-mail já está cadastrado:", error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao salvar aluno no Firestore: ", error);
+                    });
+            }
+        })
+        .catch((error) => {
+            console.error("Erro ao verificar CPF no Firestore:", error);
+        });
+});

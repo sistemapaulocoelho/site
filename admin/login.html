@@ -74,11 +74,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script> -->
-
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
@@ -188,13 +183,13 @@
                 // Determina o redirecionamento baseado na função do usuário
                 const funcaoUsuario = await determinarFuncaoUsuario();
                 
-                setTimeout(() => {
+                // setTimeout(() => {
                     if (funcaoUsuario === 'Aluno') {
                         window.location.href = 'painel-aluno.html';
                     } else {
                         window.location.href = 'painel.html';
                     }
-                }, 1000);
+                // }, 500);
 
 
             } catch (erro) {
