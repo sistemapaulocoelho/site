@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste da Função Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-functions.js"></script>
+</head>
+<body>
+  <h1>Teste a Função Criar Faturas</h1>
+  <button id="executar-funcao">Executar Função</button>
+
+      <script src="../js/firebase-config.js"></script>
+      
+  <script>
+    
+    // Obtém a referência das funções
+    const functions = firebase.functions();
+
+    // Obtém o botão
+    const btnExecutarFuncao = document.getElementById('executar-funcao');
+
+    // Função para chamar a função Firebase
+    btnExecutarFuncao.addEventListener('click', () => {
+      const criarFaturas = firebase.functions().httpsCallable('criarFaturas');
+      criarFaturas()
+        .then((result) => {
+          console.log('Função executada com sucesso:', result);
+          alert('Função executada com sucesso!');
+        })
+        .catch((error) => {
+          console.error('Erro ao executar a função:', error);
+          alert('Erro ao executar a função!');
+        });
+    });
+  </script>
+</body>
+</html>

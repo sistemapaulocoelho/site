@@ -13,7 +13,10 @@
     <link rel="stylesheet" href="css/painel.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <!-- Adicionando a biblioteca Inputmask -->
     <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6/dist/inputmask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7-beta.21/inputmask.min.js"></script>
+
 
     <!-- Preload critical resources -->
     <link rel="preload" href="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" as="script">
@@ -382,7 +385,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nome Completo *</label>
-                        <input type="text" name="nome" required>
+                        <input type="text" name="nome" id="nome-aluno" required>
                     </div>
                     <div class="form-group">
                         <label>CPF *</label>
@@ -396,7 +399,8 @@
                     </div>
                     <div class="form-group">
                         <label>Telefone *</label>
-                        <input type="text" name="telefone" required maxlength="15" placeholder="(11) 99999-9999">
+                        <input type="text" name="telefone" id="telefone-aluno" required maxlength="15"
+                            placeholder="(11) 99999-9999">
                     </div>
                 </div>
                 <div class="form-row">
@@ -405,49 +409,61 @@
                         <input type="date" name="dataNascimento" required>
                     </div>
                     <div class="form-group">
-                        <label>Plano</label>
-                        <select name="plano">
-                            <option value="MENSAL">Mensal - R$ 120,00</option>
-                            <option value="TRIMESTRAL">Trimestral - R$ 320,00</option>
-                            <option value="ANUAL">Anual - R$ 1.200,00</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
                         <label>CEP</label>
                         <input type="text" id="cep-aluno" name="cep" placeholder="00000-000" maxlength="9">
                     </div>
-                    <div class="form-group">
-                        <label>Endereço</label>
-                        <input type="text" id="endereco-aluno" name="endereco">
-                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" id="endereco-aluno" name="endereco" disabled>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Número</label>
-                        <input type="text" id="numero-aluno" name="numero">
+                        <label>Número *</label>
+                        <input type="text" id="numero-aluno" name="numero" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Complemento</label>
+                        <input type="text" id="complemento-aluno" name="complemento">
                     </div>
                     <div class="form-group">
                         <label>Bairro</label>
-                        <input type="text" id="bairro-aluno" name="bairro">
+                        <input type="text" id="bairro-aluno" name="bairro" disabled>
                     </div>
-                </div>
-                <div class="form-row">
                     <div class="form-group">
                         <label>Cidade</label>
-                        <input type="text" id="cidade-aluno" name="cidade">
+                        <input type="text" id="cidade-aluno" name="cidade" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Status</label>
+                        <label>Estado</label>
+                        <input type="text" id="estado-aluno" name="estado" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Plano</label>
+                        <select name="plano">
+                            <option value="MENSAL">MENSAL</option>
+                            <option value="TRIMESTRAL">TRIMESTRAL</option>
+                            <option value="ANUAL">ANUAL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Vencimento *</label>
+                        <input type="date" name="vencimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Situação do Aluno</label>
                         <select name="status">
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                    <button type="button" onclick="cancelarFormulario()"
+                        class="btn btn-secondary modal-cancel">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Salvar Aluno</button>
                 </div>
             </form>
@@ -463,7 +479,7 @@
                 <h3>Novo Pagamento</h3>
                 <button class="modal-close">&times;</button>
             </div>
-            <form class="modal-form">
+            <form class="modal-form" id="form-pagamentos">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Aluno *</label>
@@ -473,8 +489,13 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Matrícula *</label>
+                        <input type="text" name="matricula-aluno" id="matricula-aluno" disabled>
+                    </div>
+                    <div class="form-group">
                         <label>Valor *</label>
-                        <input type="text" name="valor" step="0.01" required>
+                        <input type="text" name="valor" id="valor" oninput="formatarValor(this)"
+                            placeholder="Digite o valor" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -485,21 +506,25 @@
                     <div class="form-group">
                         <label>Método de Pagamento</label>
                         <select name="metodo">
-                            <option value="pix">PIX</option>
-                            <option value="boleto">Boleto</option>
-                            <option value="cartao">Cartão</option>
                             <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Observações</label>
-                    <textarea name="observacoes" rows="3"></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
-                </div>
+                    <div class="form-group">
+                        <label>Status do Pagamento</label>
+                        <select name="status" required>
+                            <option value="pago">Pago</option>
+                            <option value="pendente">Pendente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea name="observacoes" id="observacoes" rows="3"></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -543,11 +568,20 @@
     </div>
     <!-- ## FINAL ############################################ -->
 
-
-    <!-- Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Scripts FIREBASE V8 -->
+    <script src="../js/firebase-config.js"></script>
+
+    <!-- Scripts da Página -->
+    <script src="./js/painel/dashboard.js"></script>
+    <script src="./js/painel/alunos.js"></script>
+    <script src="./js/painel/pagamentos.js"></script>
+    <script src="./js/painel/usuarios.js"></script>
+    <script src="./js/painel/configuracoes.js"></script>
+    <script src="./js/painel/navegacao.js"></script>
 
 
     <style>
@@ -667,544 +701,6 @@
     </style>
 
     <script>
-        // Configuração do Firebase
-        var firebaseConfig = {
-            apiKey: "AIzaSyCGudG7CvPLW_GE8JycQrC0xPE7_BvIDro",
-            authDomain: "academia-27102.firebaseapp.com",
-            projectId: "academia-27102",
-            storageBucket: "academia-27102.firebasestorage.app",
-            messagingSenderId: "702608503871",
-            appId: "1:702608503871:web:c5359c42513615ffd4348a"
-        };
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Inicializando o Firestore
-        const db = firebase.firestore();
-
-        // DASHBOARD
-        // INÍCIO ###################################################
-        // Função para carregar os dados do Firestore
-        function loadDashboardData() {
-
-            // Log do localStorage para verificar os dados armazenados
-            console.log("Dados armazenados no localStorage:");
-            console.log("Nome: ", localStorage.getItem('nomeUsuario'));
-            console.log("Email: ", localStorage.getItem('emailUsuario'));
-            console.log("Função: ", localStorage.getItem('funcaoUsuario'));
-
-            // Referência à coleção de alunos
-            db.collection("alunos").get().then((querySnapshot) => {
-                let totalAlunos = querySnapshot.size;
-                document.getElementById('total-alunos').textContent = totalAlunos;
-
-                let alunosAtivos = querySnapshot.docs.filter(doc => doc.data().status === 'ativo').length;
-                document.getElementById('alunos-ativos').textContent = alunosAtivos;
-            });
-
-            // Referência à coleção de pagamentos
-            db.collection("pagamentos").get().then((querySnapshot) => {
-                let receitaMensal = querySnapshot.docs.reduce((total, doc) => total + doc.data().valor, 0);
-                document.getElementById('receita-mensal').textContent = `R$ ${receitaMensal.toFixed(2)}`;
-
-                let pagamentosPendentes = querySnapshot.docs.filter(doc => doc.data().status === 'pendente').length;
-                document.getElementById('pagamentos-pendentes').textContent = pagamentosPendentes;
-            });
-        }
-
-        // Função para carregar os alunos mais recentes
-        function loadRecentAlunos() {
-            db.collection("alunos").orderBy("dataCadastro", "desc").limit(5).get().then((querySnapshot) => {
-                const alunosContainer = document.getElementById("recent-alunos");
-                alunosContainer.innerHTML = ''; // Limpar conteúdo anterior
-                querySnapshot.forEach(doc => {
-                    const aluno = doc.data();
-                    const alunoItem = document.createElement("div");
-                    alunoItem.classList.add("recent-item");
-                    alunoItem.innerHTML = `
-                    <div class="item-info">
-                        <strong>${aluno.nome}</strong>
-                        <span>${aluno.email}</span>
-                    </div>
-                    `;
-                    alunosContainer.appendChild(alunoItem);
-                });
-            });
-        }
-        // FIM ###################################################
-
-
-
-
-
-        // ALUNOS
-        // INÍCIO ###################################################
-        // Função para carregar os alunos
-        function loadAlunos() {
-            db.collection("alunos").get().then((querySnapshot) => {
-                const alunosContainer = document.querySelector(".data-table tbody");
-                alunosContainer.innerHTML = ''; // Limpar conteúdo anterior
-
-                querySnapshot.forEach(doc => {
-                    const aluno = doc.data();
-                    const alunoItem = document.createElement("tr");
-
-                    alunoItem.innerHTML = `
-                    <td style="text-align: center;">${aluno.matricula}</td>
-                    <td>${aluno.nome}</td>
-                    <td>${aluno.email}</td>
-                    <td style="text-align: center;">${aluno.telefone}</td>
-                    <td style="text-align: center;">${aluno.plano}</td>
-                    <td><span class="status-badge ${aluno.status}">${aluno.status}</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editAluno('${doc.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
-                `;
-                    alunosContainer.appendChild(alunoItem);
-                });
-            });
-        }
-
-        // Função para adicionar um novo aluno
-        document.getElementById("add-aluno-btn").addEventListener("click", () => {
-            const modal = document.getElementById("modal-aluno");
-            modal.classList.add("active");
-        });
-
-        // Função para salvar o aluno no Firestore
-        document.querySelector("#modal-aluno form").addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            // Verifica se o CPF já está cadastrado na coleção "alunos"
-            db.collection("alunos").where("cpf", "==", event.target.cpf.value).get()
-                .then((querySnapshot) => {
-                    if (!querySnapshot.empty) {
-                        alert("CPF já cadastrado.");
-                    } else {
-                        // CPF não existe, então cria o novo aluno
-
-                        // Espera pela matrícula única antes de prosseguir
-                        generateMatricula().then((matricula) => {
-                            const aluno = {
-                                nome: event.target.nome.value,
-                                cpf: event.target.cpf.value,
-                                email: event.target.email.value,
-                                telefone: event.target.telefone.value,
-                                plano: event.target.plano.value,
-                                status: 'ativo',
-                                matricula: matricula, // Matrícula agora é garantidamente única
-                                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-                            };
-
-                            // Cadastro do aluno no Firestore
-                            db.collection("alunos").add(aluno)
-                                .then((docRef) => {
-                                    // Verificar se o e-mail já está cadastrado no Firebase Authentication
-                                    firebase.auth().fetchSignInMethodsForEmail(aluno.email)
-                                        .then((methods) => {
-                                            if (methods.length > 0) {
-                                                // O e-mail já está registrado, não vamos criar novamente
-                                                alert("Este e-mail já está associado a uma conta.");
-                                            } else {
-                                                // O e-mail não está registrado, criar um novo usuário
-                                                firebase.auth().createUserWithEmailAndPassword(aluno.email, "senhaTemporaria")
-                                                    .then((userCredential) => {
-                                                        const user = userCredential.user;
-
-                                                        // Enviar e-mail de redefinição de senha
-                                                        firebase.auth().sendPasswordResetEmail(aluno.email)
-                                                            .then(() => {
-                                                                alert("Cadastro realizado com sucesso! Um e-mail foi enviado para o endereço de e-mail do usuário.");
-                                                            })
-                                                            .catch((error) => {
-                                                                console.error("Erro ao enviar e-mail de redefinição de senha:", error);
-                                                            });
-                                                    })
-                                                    .catch((error) => {
-                                                        // Aqui tratamos outros erros ao tentar criar o usuário
-                                                        if (error.code === 'auth/email-already-in-use') {
-                                                            alert("Este e-mail existente. O aluno foi associado a este.");
-                                                            alert("Aluno Cadastrado com Sucesso.");
-                                                        } else if (error.code === 'auth/invalid-email') {
-                                                            alert("E-mail inválido.");
-                                                        } else if (error.code === 'auth/weak-password') {
-                                                            alert("A senha deve ter pelo menos 6 caracteres.");
-                                                        } else {
-                                                            console.error("Erro ao criar usuário no Firebase:", error);
-                                                        }
-                                                    });
-                                            }
-
-                                            // Fechar o modal e resetar o formulário
-                                            const modalAluno = document.getElementById("modal-aluno");
-                                            if (modalAluno && modalAluno.classList.contains("active")) {
-                                                modalAluno.classList.remove("active");
-                                            }
-                                            document.querySelector("#modal-aluno form").reset();
-                                        })
-                                        .catch((error) => {
-                                            console.error("Erro ao verificar se o e-mail já está cadastrado:", error);
-                                        });
-
-
-                                })
-                                .catch((error) => {
-                                    console.error("Erro ao salvar aluno no Firestore: ", error);
-                                });
-                        }).catch((error) => {
-                            console.error("Erro ao gerar matrícula:", error);
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Erro ao verificar CPF no Firestore:", error);
-                });
-        });
-
-        // Função para editar um aluno
-        function editAluno(alunoId) {
-            const modal = document.getElementById("modal-aluno");
-            modal.classList.add("active");
-
-            db.collection("alunos").doc(alunoId).get().then(doc => {
-                if (doc.exists) {
-                    const aluno = doc.data();
-                    document.querySelector("input[name='nome']").value = aluno.nome;
-                    document.querySelector("input[name='cpf']").value = aluno.cpf;
-                    document.querySelector("input[name='email']").value = aluno.email;
-                    document.querySelector("input[name='telefone']").value = aluno.telefone;
-                    document.querySelector("select[name='plano']").value = aluno.plano;
-                }
-            });
-        }
-
-        // Função para gerar matrícula única com async/await
-        async function generateMatricula() {
-            let matricula = Math.floor(Math.random() * 100000).toString(); // Gera uma matrícula aleatória
-
-            // Verifica se a matrícula já existe no banco de dados
-            const querySnapshot = await db.collection("alunos").where("matricula", "==", matricula).get();
-
-            // Se a matrícula já existir, gera uma nova
-            if (!querySnapshot.empty) {
-                console.log("Matrícula já existente, gerando uma nova...");
-                return generateMatricula(); // Chama novamente a função para gerar nova matrícula
-            } else {
-                console.log("Matrícula gerada: " + matricula);
-                return matricula;
-            }
-        }
-        // FINAL ###################################################
-
-
-
-
-
-        // PAGAMENTOS
-        // INÍCIO ###################################################
-        // Função para carregar os pagamentos
-        function loadPagamentos() {
-            db.collection("pagamentos").get().then((querySnapshot) => {
-                const pagamentosContainer = document.querySelector("#pagamentos .data-table tbody");
-                pagamentosContainer.innerHTML = ''; // Limpar conteúdo anterior
-
-                querySnapshot.forEach(doc => {
-                    const pagamento = doc.data();
-                    const pagamentoItem = document.createElement("tr");
-
-                    pagamentoItem.innerHTML = `
-                    <td style="text-align: center;">${pagamento.matricula}</td>
-                    <td>${pagamento.aluno}</td>
-                    <td style="text-align: center;">R$ ${pagamento.valor.toFixed(2)}</td>
-                    <td style="text-align: center;">${pagamento.vencimento.toDate().toLocaleDateString()}</td>
-                    <td style="text-align: center;"><span class="status-badge ${pagamento.status}">${pagamento.status}</span></td>
-                    <td style="text-align: center;">${pagamento.metodo}</td>
-                    <td style="text-align: center;">
-                        <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editPagamento('${doc.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-action delete" title="Excluir" data-id="${doc.id}" onclick="deletePagamento('${doc.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                    pagamentosContainer.appendChild(pagamentoItem);
-                });
-            });
-        }
-
-        // Função para adicionar um novo pagamento
-        document.getElementById("add-pagamento-btn").addEventListener("click", () => {
-            const modal = document.getElementById("modal-pagamento");
-            modal.classList.add("active");
-        });
-
-        // Função para salvar o pagamento no Firestore
-        document.querySelector("#modal-pagamento form").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const pagamento = {
-                alunoId: event.target.alunoId.value,
-                valor: parseFloat(event.target.valor.value),
-                vencimento: firebase.firestore.Timestamp.fromDate(new Date(event.target.vencimento.value)),
-                status: 'pendente', // Status padrão como "pendente"
-                metodo: event.target.metodo.value,
-                observacoes: event.target.observacoes.value,
-                matricula: generateMatriculaPagamento(), // Gerar matrícula para pagamento, se necessário
-                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            };
-
-            db.collection("pagamentos").add(pagamento)
-                .then(() => {
-                    alert("Pagamento cadastrado com sucesso!");
-                    loadPagamentos(); // Recarregar a lista de pagamentos
-                    document.getElementById("modal-pagamento").classList.remove("active");
-                    document.querySelector("#modal-pagamento form").reset();
-                })
-                .catch(error => {
-                    console.error("Erro ao cadastrar pagamento: ", error);
-                });
-        });
-
-        // Função para editar um pagamento
-        function editPagamento(pagamentoId) {
-            const modal = document.getElementById("modal-pagamento");
-            modal.classList.add("active");
-
-            db.collection("pagamentos").doc(pagamentoId).get().then(doc => {
-                if (doc.exists) {
-                    const pagamento = doc.data();
-                    document.querySelector("select[name='alunoId']").value = pagamento.alunoId;
-                    document.querySelector("input[name='valor']").value = pagamento.valor;
-                    document.querySelector("input[name='vencimento']").value = pagamento.vencimento.toDate().toISOString().split('T')[0];
-                    document.querySelector("select[name='metodo']").value = pagamento.metodo;
-                    document.querySelector("textarea[name='observacoes']").value = pagamento.observacoes;
-                }
-            });
-        }
-
-        // Função para excluir um pagamento
-        function deletePagamento(pagamentoId) {
-            if (confirm("Tem certeza que deseja excluir este pagamento?")) {
-                db.collection("pagamentos").doc(pagamentoId).delete()
-                    .then(() => {
-                        alert("Pagamento excluído com sucesso!");
-                        loadPagamentos(); // Recarregar a lista de pagamentos
-                    })
-                    .catch(error => {
-                        console.error("Erro ao excluir pagamento: ", error);
-                    });
-            }
-        }
-
-        // Função para gerar um código de pagamento (caso seja necessário)
-        function generateMatriculaPagamento() {
-            return 'PGT' + Math.floor(Math.random() * 1000000);
-        }
-        // FINAL ###################################################
-
-
-
-
-        // CONFIGURAÇÕES
-        // INÍCIO ###################################################
-        // Função para carregar as configurações do Firestore
-        function loadConfiguracoes() {
-            // configID
-            const configDocRef = db.collection("configuracoes").doc("configId"); // Substitua "configId" pelo ID do seu documento de configuração
-            configDocRef.get().then((doc) => {
-                if (doc.exists) {
-                    const configData = doc.data();
-                    // Preenchendo os campos do formulário com os dados do Firestore
-                    document.querySelector("input[name='nomeAcademia']").value = configData.nomeAcademia;
-                    document.querySelector("input[name='emailContato']").value = configData.emailContato;
-                    document.querySelector("input[name='telefone']").value = configData.telefone;
-                } else {
-                    console.log("Documento de configurações não encontrado.");
-                }
-            }).catch((error) => {
-                console.error("Erro ao carregar as configurações: ", error);
-            });
-
-            // Planos
-            const planosDocRef = db.collection("configuracoes").doc("planos"); // Substitua "configId" pelo ID do seu documento de configuração
-            planosDocRef.get().then((doc) => {
-                if (doc.exists) {
-                    const planosData = doc.data();
-                    // Preenchendo os campos do formulário com os dados do Firestore
-                    document.querySelector("input[name='planoMensal']").value = planosData.planoMensal;
-                    document.querySelector("input[name='planoTrimestral']").value = planosData.planoTrimestral;
-                    document.querySelector("input[name='planoAnual']").value = planosData.planoAnual;
-                } else {
-                    console.log("Documento de configurações não encontrado.");
-                }
-            }).catch((error) => {
-                console.error("Erro ao carregar as configurações: ", error);
-            });
-
-        }
-
-        // Função para salvar as configurações no Firestore
-        document.addEventListener("DOMContentLoaded", function () {
-            // Agora o DOM está completamente carregado, podemos adicionar os eventListeners
-            const configForm = document.querySelector(".config-form");
-            // Verifica se o formulário de configurações existe
-            if (configForm) {
-                configForm.addEventListener("submit", function (event) {
-                    event.preventDefault();
-                    const configuracoes = {
-                        nomeAcademia: event.target.nomeAcademia.value,
-                        emailContato: event.target.emailContato.value,
-                        telefone: event.target.telefone.value,
-                    };
-
-                    const configDocRef = db.collection("configuracoes").doc("configId"); // Substitua "configId" pelo ID do seu documento de configuração
-
-                    configDocRef.set(configuracoes, { merge: true })
-                        .then(() => {
-                            alert("Configurações salvas com sucesso!");
-                        })
-                        .catch((error) => {
-                            console.error("Erro ao salvar configurações: ", error);
-                        });
-                });
-            } else {
-                console.error("Formulário não encontrado");
-            }
-        });
-
-        // Função para salvar as os Planos no Firestore
-        document.addEventListener("DOMContentLoaded", function () {
-            // Agora o DOM está completamente carregado, podemos adicionar os eventListeners
-            const configForm = document.querySelector(".planos-form");
-            // Verifica se o formulário de configurações existe
-            if (configForm) {
-                configForm.addEventListener("submit", function (event) {
-                    event.preventDefault();
-                    const configuracoes = {
-                        planoMensal: parseFloat(event.target.planoMensal.value),
-                        planoTrimestral: parseFloat(event.target.planoTrimestral.value),
-                        planoAnual: parseFloat(event.target.planoAnual.value),
-                    };
-
-                    const configDocRef = db.collection("configuracoes").doc("planos"); // Substitua "configId" pelo ID do seu documento de configuração
-
-                    configDocRef.set(configuracoes, { merge: true })
-                        .then(() => {
-                            alert("Configurações salvas com sucesso!");
-                        })
-                        .catch((error) => {
-                            console.error("Erro ao salvar configurações: ", error);
-                        });
-                });
-            } else {
-                console.error("Formulário não encontrado");
-            }
-        });
-        // ## FINAL CONFIGURAÇÕES ###################################################
-
-
-
-        // USUÁRIOS
-        // INÍCIO ###################################################
-        // Função para carregar os usuários
-        function loadUsuarios() {
-            db.collection("usuarios").get().then((querySnapshot) => {
-                const usuariosContainer = document.querySelector("#usuarios .data-table tbody");
-                usuariosContainer.innerHTML = ''; // Limpar conteúdo anterior
-
-                querySnapshot.forEach(doc => {
-                    const usuario = doc.data();
-                    const usuarioItem = document.createElement("tr");
-
-                    usuarioItem.innerHTML = `
-                        <td>${usuario.nome}</td>
-                        <td>${usuario.email}</td>
-                        <td>${usuario.funcao}</td>
-                        <td>${usuario.dataCriacao.toDate().toLocaleDateString()}</td>
-                        <td style="text-align: center;">
-                            <button class="btn-action edit" title="Editar" data-id="${doc.id}" onclick="editUsuario('${doc.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                        `;
-                    usuariosContainer.appendChild(usuarioItem);
-                });
-            });
-        }
-
-        // Função para editar um usuário
-        function editUsuario(usuarioId) {
-            const modal = document.getElementById("modal-usuario");
-            modal.classList.add("active");
-
-            db.collection("usuarios").doc(usuarioId).get().then(doc => {
-                if (doc.exists) {
-                    const usuario = doc.data();
-                    document.querySelector("input[name='nome']").value = usuario.nome;
-                    document.querySelector("input[name='email']").value = usuario.email;
-                    document.querySelector("select[name='funcao']").value = usuario.funcao;
-                }
-            });
-        }
-
-        // Função para adicionar um novo usuário
-        document.getElementById("add-usuario-btn").addEventListener("click", () => {
-            const modal = document.getElementById("modal-usuario");
-            modal.classList.add("active");
-        });
-
-        // Função para salvar o usuário no Firestore
-        document.querySelector("#modal-usuario form").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const usuario = {
-                nome: event.target.nome.value,
-                email: event.target.email.value,
-                funcao: event.target.funcao.value,
-                dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
-            };
-
-            db.collection("usuarios").add(usuario)
-                .then(() => {
-                    alert("Usuário cadastrado com sucesso!");
-                    loadUsuarios(); // Recarregar a lista de usuários
-                    document.getElementById("modal-usuario").classList.remove("active");
-                    document.querySelector("#modal-usuario form").reset();
-                })
-                .catch(error => {
-                    console.error("Erro ao cadastrar usuário: ", error);
-                });
-        });
-        // ## FINAL USUÁRIOS ###################################################
-
-
-
-
-
-        // NAVEGÃO
-        // INÍCIO ###################################################
-        const navLinks = document.querySelectorAll(".nav-link");
-        navLinks.forEach(link => {
-            link.addEventListener("click", function (event) {
-                // Remover a classe ativa de todas as seções
-                navLinks.forEach(nav => nav.classList.remove("active"));
-                // Adicionar a classe ativa à seção clicada
-                event.target.classList.add("active");
-
-                // Esconder todas as seções
-                const sections = document.querySelectorAll(".content-section");
-                sections.forEach(section => section.classList.remove("active"));
-
-                // Mostrar a seção correspondente
-                const sectionId = event.target.getAttribute("data-section");
-                document.getElementById(sectionId).classList.add("active");
-            });
-        });
-        // ## FINAL NAVEGAÇÃO ###################################################
-
 
         // Função para logout
         function logout() {
@@ -1241,36 +737,6 @@
             }, 5000);
         }
         // ## FINAL NOTIFICAÇÃO ###################################################
-
-        // Máscaras de entrada
-        // INÍCIO ###################################################
-        function aplicarMascaras() {
-            // Máscara para CPF
-            const cpfInput = document.querySelector("input[name='cpf']");
-            if (cpfInput) {
-                Inputmask("999.999.999-99").mask(cpfInput);
-            }
-
-            // Máscara para telefone
-            const telefoneInput = document.querySelector("input[name='telefone']");
-            if (telefoneInput) {
-                Inputmask("(99) 99999-9999").mask(telefoneInput);
-            }
-
-            // Máscara para CEP
-            const cepInput = document.querySelector("input[name='cep']");
-            if (cepInput) {
-                Inputmask("99999-999").mask(cepInput);
-            }
-
-            // Máscara para data de vencimento
-            const vencimentoInput = document.querySelector("input[name='vencimento']");
-            if (vencimentoInput) {
-                Inputmask("99/99/9999").mask(vencimentoInput);
-            }
-        }
-
-        // ## FINAL Máscaras de entrada #################################
 
 
         // INÍCIO DOM ###################################################
@@ -1343,6 +809,13 @@
             // Fechar modais
             modalCloses.forEach(close => {
                 close.addEventListener('click', function () {
+                    // Limpa os campos do formulário
+                    const formulario = document.querySelector("#form-pagamentos"); // Selecione o formulário pelo ID correto
+                    if (formulario) {
+                        formulario.reset(); // Limpa todos os campos do formulário
+                    }
+
+                    // Fecha o modal
                     modals.forEach(modal => modal.classList.remove('active'));
                 });
             });
@@ -1468,7 +941,6 @@
         // ## FINAL carregar Localstorage ####################################################2
 
 
-
         // Carregar os dados ao carregar a página
         window.addEventListener("load", function () {
             loadDashboardData();
@@ -1494,6 +966,12 @@
         });
 
     </script>
+
+    <!-- Scripts Utilitários -->
+    <script src="../js/dropdown.js"></script>
+    <script src="../js/cep.js"></script>
+    <script src="../js/maiuscula.js"></script>
+    <script src="../js/mascaras.js"></script>
 </body>
 
 </html>

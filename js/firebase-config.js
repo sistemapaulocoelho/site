@@ -14,6 +14,3 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-// Exporte os módulos para uso em outras páginas
-export { auth, db };
